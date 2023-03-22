@@ -1,4 +1,11 @@
 using System;
+using System.Timers;
+using Windows.Foundation;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
 // La classe BattleShipField est le moteur du jeu de bataille
 // elle ne doit pas interférer avec le rendu graphique.
 // elle permet d'instancier une partie
@@ -20,20 +27,22 @@ public class BattleShipField
     // Liste des joueurs (on se limite à 1 ou deux joueurs pour l'instant)
     private List<Player> playersList = new List<Player>();
     // La grille de jeu
-    private SeaElement[,] seaGrid = new SeaElement[20, 20];
+    private SeaElement[,] seaGrid;
     // La flotte qui contient les vaisseaux de tous les joueurs.
     public List<Boat> boatList = new List<Boat>();
+
+    public int size;
 
     public BattleShipField()
     {
         // Initialiser la grille avec des éléments de mer vides
-        this.size = size;
-        SeaElements = new SeaElement[size, size];
+        this.size = 20;
+        seaGrid = new SeaElement[size, size];
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
-                SeaElements[i, j] = new SeaElement(new Point(i, j));
+                seaGrid[i, j] = new SeaElement(new Point(i, j));
             }
         }
     }
@@ -47,11 +56,12 @@ public class BattleShipField
             if (boat.Elements.Contains(element))
             {
                 element.Status = AppDef.SeaElementStatus.Hit;
-                boat.IsSunk = boat.IsBoatSunk();
+                boat.boolSunk = boat.isBoatSunk();
 
-                if (boat.IsSunk)
+                if (boat.isBoatSunk())
                 {
                     Console.WriteLine($"Le bateau {boat.Name} est coulé !");
+                    boat.stat
                 }
 
                 return;
@@ -105,7 +115,7 @@ public class BattleShipField
 
     // Affichage d’un bateau
     // Affichage d'un bateau
-    public void ShowBoat()
+    public void ShowBoat(Boat boat)
     {
         foreach (var elt in ShipElt)
         {
@@ -118,9 +128,9 @@ public class BattleShipField
     // Affichage des bateaux d'un joueur
     public void ShowAllBoats()
     {
-        foreach (Boat boat in boats)
+        foreach (Boat boat in boatList)
         {
-            boat.ShowBoat();
+            ShowBoat(boat);
         }
     }
 
@@ -169,14 +179,14 @@ public class BattleShipField
         while (!gameFinished)
         {
             // Tour du joueur 1
-            AppDef.State gameState = AppDef.State.NotStarted;
-            while (gameState == AppDef.State.NotStarted)
+            AppDef.GameStatus gameState = AppDef.GameStatus.NotStarted;
+            while (gameState == AppDef.GameStatus.NotStarted)
             {
                 gameState = player1.PlayTurn(this);
             }
 
             // Vérification de la fin de partie
-            if (gameState == AppDef.State.GameFinished)
+            if (gameState == AppDef.GameStatus.Completed)
             {
                 Console.WriteLine("Le joueur 1 a gagné !");
                 gameFinished = true;
@@ -184,14 +194,14 @@ public class BattleShipField
             }
 
             // Tour du joueur 2
-            gameState = AppDef.State.NotStarted;
-            while (gameState == AppDef.State.NotStarted)
+            gameState = AppDef.GameStatus.NotStarted;
+            while (gameState == AppDef.GameStatus.NotStarted)
             {
                 gameState = player2.PlayTurn(this);
             }
 
             // Vérification de la fin de partie
-            if (gameState == AppDef.State.GameFinished)
+            if (gameState == AppDef.GameStatus.Completed)
             {
                 Console.WriteLine("Le joueur 2 a gagné !");
                 gameFinished = true;

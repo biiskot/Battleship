@@ -1,8 +1,11 @@
 using System;
+using Windows.Foundation
+
 
 public struct ShipElement
 {
     // Status d'un élément de bateau = flotte, Touché
+    public AppDef.State status;
     // Coordonnée de cet élément
     public Point elt;
     // besoin d'autre chose?
@@ -17,8 +20,7 @@ public class Boat
     public Guid Owner { get => owner; }
 
     // le vaisseau flotte encore, est touché ou est coulé
-    private bool isSunk;
-    public bool IsSunk { get => isSunk; }
+    public bool boolSunk;
 
     // coordonnées de la proue, avant du bateau
     private Point bow;
@@ -36,6 +38,8 @@ public class Boat
     // Tableau d'élements de bateau qui constituent le corps du bateau
     public ShipElement[] ShipElt;
 
+    public AppDef.State status;
+
     // constructeur
     public Boat(string name, int size, int pace, Guid owner, Point bow)
     {
@@ -44,11 +48,12 @@ public class Boat
         this.pace = pace;
         this.owner = owner;
         this.bow = bow;
+        this.status = AppDef.State.Afloat;
 
         ShipElt = new ShipElement[size];
         for (int i = 0; i < size; i++)
         {
-            ShipElt[i] = new ShipElement { status = ShipElement.Status.Flotte, elt = new Point(bow.X, bow.Y + i) };
+            ShipElt[i] = new ShipElement { status = AppDef.State.Afloat, elt = new Point(bow.X, bow.Y + i) };
         }
     }
 
@@ -59,7 +64,7 @@ public class Boat
         {
             if (element.elt == elt)
             {
-                element.status = ShipElement.Status.Touche;
+                element.status = AppDef.State.Struck;
                 return true;
             }
         }
@@ -68,15 +73,16 @@ public class Boat
 
     // Vérifie si le bateau est coulé
     // méthode qui vérifie si le bateau est coulé
-    public bool IsSunk()
+    public bool isBoatSunk()
     {
         foreach (ShipElement elt in ShipElt)
         {
-            if (elt.elt != null && !elt.elt.IsEmpty)
+            if (elt.elt != null && elt.status != AppDef.State.Struck)
             {
                 return false; // il reste au moins un élément du bateau à flot
             }
         }
+        this.status = AppDef.State.Sank;
         return true; // tous les éléments du bateau sont touchés
     }
 }

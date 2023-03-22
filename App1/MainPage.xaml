@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Style="{StaticResource HandwritingViewCandidatesBarStyle}" BorderBrush="White" Background="#FF757575">
-        <Button Content="Lancer" Margin="0,821,0,0" VerticalAlignment="Top" Height="44" Width="119" HorizontalAlignment="Center" Click="launchGame"/>
+        <Button Content="Lancer" Margin="0,583,0,0" VerticalAlignment="Top" Height="44" Width="119" HorizontalAlignment="Center" Click="launchGame"/>
 
     </Grid>
 </Page>

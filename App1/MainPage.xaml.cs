@@ -31,8 +31,8 @@ namespace App1
 
         private void launchGame(object sender, RoutedEventArgs e)
         {
-            BattleShipField game = new BattleShipField();
-            game.Launch();
+            //BattleShipField game = new BattleShipField();
+            //game.StartGame();
             this.Frame.Navigate(typeof(PlayScreen));
         }
         

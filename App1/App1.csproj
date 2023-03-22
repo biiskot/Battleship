@@ -119,13 +119,21 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AppDef.cs" />
+    <Compile Include="BattleShipField.cs" />
+    <Compile Include="Boat.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="DataEnums.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Player.cs" />
     <Compile Include="PlayScreen.xaml.cs">
       <DependentUpon>PlayScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sea.cs" />
+    <Compile Include="SeaElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

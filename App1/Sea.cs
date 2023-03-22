@@ -1,4 +1,8 @@
 using App1;
+using System.Collections.Generic;
+using Windows.UI.Xaml.Shapes;
+using Windows.UI.Xaml;
+using System;
 
 // Gestion de l'affichage de la mer pour un joueur
 public class Sea
@@ -32,12 +36,21 @@ public class Sea
             impactPoint = SeaElements.Find(sealElement => sealElement.ellipse == ellipse);
             if (impactPoint != null)
             {
-                // ...
-                // redessin de la mer en bleu
-                public void Repaint()
-                {
-                    foreach (var item in SeaElements)
-                    {
-                        item.ellipse.Fill = AppDef.blueBrush;
-                    }
-                }
+
+            }
+            // ...
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception FireAt(): ", ex.Message);
+        }
+    }
+    // redessin de la mer en bleu
+    public void Repaint()
+    {
+        foreach (var item in SeaElements)
+        {
+            item.ellipse.Fill = AppDef.blueBrush;
+        }
+    }
+}
