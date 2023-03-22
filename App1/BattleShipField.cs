@@ -5,6 +5,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Shapes;
 
 // La classe BattleShipField est le moteur du jeu de bataille
 // elle ne doit pas interférer avec le rendu graphique.
@@ -33,39 +36,32 @@ public class BattleShipField
 
     public int size;
 
-    public BattleShipField()
-    {
-        // Initialiser la grille avec des éléments de mer vides
-        this.size = 20;
-        seaGrid = new SeaElement[size, size];
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                seaGrid[i, j] = new SeaElement(new Point(i, j));
-            }
-        }
-    }
+    public Sea sea = new Sea();
 
     // si un bateau est touché, il faut le retrouver et marquer un de ses éléments 'touché' et
     // vérifier s'il n'est pas coulé
-    public void MarkHitElement(SeaElement element)
+    public void MarkHitElement(SeaElement seaElt)
     {
         foreach (var boat in boatList)
         {
-            if (boat.Elements.Contains(element))
+            foreach(var shipElt in boat.ShipElt)
             {
-                element.Status = AppDef.SeaElementStatus.Hit;
-                boat.boolSunk = boat.isBoatSunk();
-
-                if (boat.isBoatSunk())
+                //Si les coord du ship element et égal à la coordonnée du sea element
+                if (shipElt.coord == seaElt.coord)
                 {
-                    Console.WriteLine($"Le bateau {boat.Name} est coulé !");
-                    boat.stat
-                }
+                    element.Status = AppDef.SeaElementStatus.Hit;
+                    boat.boolSunk = boat.isBoatSunk();
 
-                return;
+                    if (boat.isBoatSunk())
+                    {
+                        Console.WriteLine($"Le bateau est coulé !");
+
+                    }
+
+                    return;
+                }
             }
+      
         }
     }
 
@@ -79,15 +75,18 @@ public class BattleShipField
             Boat boat;
             while (!positionFound)
             {
-                // On crée un nouveau bateau avec une taille aléatoire
-                int boatSize = val.Next(2, 6);
-                boat = new Boat(boatSize);
+
                 // calcul d'une position aléatoire
                 // calcul d'un cap aléatoire
-                int posX = val.Next(GridSize - boatSize);
-                int posY = val.Next(GridSize - boatSize);
+                int posX = val.Next(AppDef.nbCol - boatSize);
+                int posY = val.Next(AppDef.nbRow - boatSize);
                 int heading = val.Next(360);
-                boat.Position = new Position(posX, posY);
+
+                // On crée un nouveau bateau avec une taille aléatoire
+                int boatSize = val.Next(2, 5);
+                boat = new Boat(boatSize,player.Pseudo,new Position(posX,posY);
+               
+               
                 boat.Heading = heading;
                 // test la collision de deux bateaux, utile pour le placement
                 bool collision = false;
@@ -117,10 +116,10 @@ public class BattleShipField
     // Affichage d'un bateau
     public void ShowBoat(Boat boat)
     {
-        foreach (var elt in ShipElt)
+        foreach (var elt in boat.ShipElt)
         {
             Point location = new Point(Prow.X + elt.elt.X, Prow.Y + elt.elt.Y);
-            MainP.drawEllipseOnCanvas(location, AppDef.shipBrush);
+            MainPage.drawEllipseOnCanvas(location, AppDef.shipBrush);
         }
     }
 
@@ -143,10 +142,30 @@ public class BattleShipField
     // il faut mettre à jour l'état des bateaux
     // Mettre en place la gestion du level et des tirs restants pour les joueurs
     // et décider de la fin de la partie
-    public AppDef.State ProcessStrike(Guid playerID, SeaElement strikeElt)
+
+    // Fait apparaitre le point d'impact en rouge quand on clique sur une ellipse
+ public static void EffectuerUnTir(object sender, PointerRoutedEventArgs e)
     {
-        // A compléter avec les méthodes utiles...
-        return AppDef.State.NotStarted;
+        // si une partie est en cours d'exécution
+        if (GamesManager.GameStatus == AppDef.GameStatus.Running)
+        {
+            AppDef.PlayerStatus playerStatus = bSF.GetPlayerStatus(myPlayerID);
+            // si le joueur courant n'a pas encore perdu la partie
+            if (playerStatus != AppDef.PlayerStatus.Loser)
+            {
+                // si on a cliqué sur une ellipse, on la peint en rouge et on appelle la méthode
+                // qui va rechercher l'élément de mer concerné (sea.FireAt() )
+                if (sender is Windows.UI.Xaml.Shapes.Ellipse)
+                {
+                    (sender as Ellipse).Fill = AppDef.redBrush;
+                    // Déclenchement du tir
+                    sea.FireAt(sender as Ellipse);
+                }
+            }
+
+        }
+
+
     }
 
 

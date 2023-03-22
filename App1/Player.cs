@@ -1,11 +1,14 @@
 ﻿// Le player est lui susceptible de participer à plusieurs parties en même temps.
 using System;
+using System.Collections.Generic;
 
 public class Player
 {
     public String Pseudo { get; set; }
     public Guid PlayerID { get; }
     public AppDef.PlayerStatus Status { get; set; }
+    
+    public List<Boat> BoatList;
     public Player(string pseudo, int strikeCredit, AppDef.PlayerStatus status)
     {
         PlayerID = Guid.NewGuid();

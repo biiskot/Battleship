@@ -11,6 +11,7 @@ public class Sea
     public int Row { get; set; }
     public int Col { get; set; }
     private MainPage MainP;
+    private SeaElement[,] seaGrid;
     public Sea(int row, int col, MainPage main)
     {
         Row = row;
@@ -20,6 +21,16 @@ public class Sea
         int ellipseHeight = AppDef.hauteurMer / col;
         int leftMargin = 0, rightMargin = 0, topMargin = 0, bottomMargin = 0;
         Thickness thic = new Thickness(leftMargin, topMargin, rightMargin, bottomMargin);
+
+        seaGrid = new SeaElement[row, col];
+
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < col; j++)
+            {
+                seaGrid[i, j] = new SeaElement(new Point(i, j));
+            }
+        }
         // ...
     }
     // méthode chargée de retouver l'élément de mer atteint
