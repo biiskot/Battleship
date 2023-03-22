@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Serialization;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -30,10 +31,8 @@ namespace App1
 
         private void launchGame(object sender, RoutedEventArgs e)
         {
-
-            bool [,] plateauJeu= new bool[20,20];   //On créé le plateau en tant que tableau 2d 20x20
-
-            Debug.WriteLine("launchGame called");
+            BattleShipField game = new BattleShipField();
+            game.Launch();
             this.Frame.Navigate(typeof(PlayScreen));
         }
         
