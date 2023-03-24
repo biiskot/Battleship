@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Shapes;
+using App1;
 
 // La classe BattleShipField est le moteur du jeu de bataille
 // elle ne doit pas interférer avec le rendu graphique.
@@ -35,36 +36,12 @@ public class BattleShipField
     public List<Boat> boatList = new List<Boat>();
 
     public int size;
+    private int NumBoatsPerPlayer = 4;
 
-    public Sea sea = new Sea();
 
     // si un bateau est touché, il faut le retrouver et marquer un de ses éléments 'touché' et
     // vérifier s'il n'est pas coulé
-    public void MarkHitElement(SeaElement seaElt)
-    {
-        foreach (var boat in boatList)
-        {
-            foreach(var shipElt in boat.ShipElt)
-            {
-                //Si les coord du ship element et égal à la coordonnée du sea element
-                if (shipElt.coord == seaElt.coord)
-                {
-                    element.Status = AppDef.SeaElementStatus.Hit;
-                    boat.boolSunk = boat.isBoatSunk();
-
-                    if (boat.isBoatSunk())
-                    {
-                        Console.WriteLine($"Le bateau est coulé !");
-
-                    }
-
-                    return;
-                }
-            }
-      
-        }
-    }
-
+  
     // A compléter avec toutes les méthodes utiles …
     // Création de l'ensemble des bateaux de chaque joueur
     public void CreateBoatsForPlayer(Player player, List<Boat> existingBoats)
@@ -75,16 +52,16 @@ public class BattleShipField
             Boat boat;
             while (!positionFound)
             {
-
+                // On crée un nouveau bateau avec une taille aléatoire
+                int boatSize = val.Next(2, 5);
                 // calcul d'une position aléatoire
                 // calcul d'un cap aléatoire
                 int posX = val.Next(AppDef.nbCol - boatSize);
                 int posY = val.Next(AppDef.nbRow - boatSize);
                 int heading = val.Next(360);
 
-                // On crée un nouveau bateau avec une taille aléatoire
-                int boatSize = val.Next(2, 5);
-                boat = new Boat(boatSize,player.Pseudo,new Position(posX,posY);
+                
+                boat = new Boat(boatSize,player.PlayerID,new Point(posX,posY));
                
                
                 boat.Heading = heading;
@@ -134,46 +111,37 @@ public class BattleShipField
     }
 
     // Gestion du tir effectué par un joueur sur un élément de mer :
-
-
-
-
-
-    // il faut mettre à jour l'état des bateaux
-    // Mettre en place la gestion du level et des tirs restants pour les joueurs
-    // et décider de la fin de la partie
-
-    // Fait apparaitre le point d'impact en rouge quand on clique sur une ellipse
- public static void EffectuerUnTir(object sender, PointerRoutedEventArgs e)
+    public AppDef.State ProcessStrike(Guid playerID, SeaElement strikeElt)
     {
-        // si une partie est en cours d'exécution
-        if (GamesManager.GameStatus == AppDef.GameStatus.Running)
+
+        // il faut mettre à jour l'état des bateaux
+        // Mettre en place la gestion du level et des tirs restants pour les joueurs
+        // et décider de la fin de la partie
+
+
+        foreach (Boat boat in boatList)
         {
-            AppDef.PlayerStatus playerStatus = bSF.GetPlayerStatus(myPlayerID);
-            // si le joueur courant n'a pas encore perdu la partie
-            if (playerStatus != AppDef.PlayerStatus.Loser)
+            foreach(ShipElement element in boat.ShipElt)
             {
-                // si on a cliqué sur une ellipse, on la peint en rouge et on appelle la méthode
-                // qui va rechercher l'élément de mer concerné (sea.FireAt() )
-                if (sender is Windows.UI.Xaml.Shapes.Ellipse)
+                if (element.coord == strikeElt.coord)        //Si shipElement à l'emplacement du seaElement touché :
                 {
-                    (sender as Ellipse).Fill = AppDef.redBrush;
-                    // Déclenchement du tir
-                    sea.FireAt(sender as Ellipse);
+
+                    element.changeElementStatus(AppDef.State.Struck);   //Si element touché, on change son statut
+                    return AppDef.State.Struck;
                 }
             }
-
         }
-
-
+        return AppDef.State.Afloat;
     }
+
+   
 
 
     public void StartGame()
     {
         // Création des joueurs
-        Player player1 = new Player("Joueur 1");
-        Player player2 = new Player("Joueur 2");
+        Player player1 = new Player("joueur1",10,AppDef.PlayerStatus.NotSet);
+        Player player2 = new Player("joueur2", 10, AppDef.PlayerStatus.NotSet);
 
         // Ajout des joueurs à la liste des joueurs de la partie
         playersList.Add(player1);

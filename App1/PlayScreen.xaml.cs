@@ -23,9 +23,19 @@ namespace App1
     /// </summary>
     public sealed partial class PlayScreen : Page
     {
+        public BattleShipField battleshipField;
+        public Sea sea;
         public PlayScreen()
         {
             this.InitializeComponent();
+            //On instancie nu champ de ataille à la création du PLay Screen
+            try
+            {
+                battleshipField = new BattleShipField();
+                sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
+                Console.WriteLine("Champ de ataille créé");
+            }
+            catch { }
         }
 
         private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
@@ -50,7 +60,7 @@ namespace App1
                     {
                         (sender as Ellipse).Fill = AppDef.redBrush;
                         // Déclenchement du tir
-                        sea.FireAt(sender as Ellipse);
+                        PlayScreen.sea.FireAt(sender as Ellipse);
                     }
                 }
 

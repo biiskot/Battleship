@@ -9,6 +9,7 @@ public class SeaElement
     // permet de déterminer la position des évenements 'Tir'
     public Ellipse ellipse = new Ellipse();
     public Point coord;
+    public int RegenCycles;
     public SeaElement(Thickness thic, int row, int col, int width, int height, int regenCycles)
     {
         RegenCycles = regenCycles;

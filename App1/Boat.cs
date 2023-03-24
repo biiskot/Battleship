@@ -9,10 +9,16 @@ public struct ShipElement
     // Coordonnée de cet élément
     public Point coord;
     // besoin d'autre chose?
+
+    public void changeElementStatus(AppDef.State state)
+    {
+        status = state;
+    }
+
 }
 public class Boat
 {
-    private string owner { get; set; }
+    private Guid owner { get; set; }
 
     // le vaisseau flotte encore, est touché ou est coulé
     public bool boolSunk;
@@ -21,7 +27,7 @@ public class Boat
     private Point bow { get;}
 
     // taille du bateau en nombre d'éléments
-    private int size;
+    public int size;
     public int Size { get => size; }
 
     // allure du bateau.
@@ -34,7 +40,7 @@ public class Boat
     public AppDef.State status;
 
     // constructeur
-    public Boat( int size, string owner, Point bow)
+    public Boat( int size, Guid owner, Point bow)
     {
         this.size = size;
         this.owner = owner;
@@ -44,31 +50,16 @@ public class Boat
         ShipElt = new ShipElement[size];
         for (int i = 0; i < size; i++)
         {
-            ShipElt[i] = new ShipElement { status = AppDef.State.Afloat, elt = new Point(bow.X, bow.Y + i) };
+            ShipElt[i] = new ShipElement { status = AppDef.State.Afloat, coord = new Point(bow.X, bow.Y + i) };
         }
     }
-
-    // Vérifie si le bateau est touché par un tir sur l'élément donné
-    public bool IsHit(Point elt)
-    {
-        foreach (ShipElement element in ShipElt)
-        {
-            if (element.coord == elt)
-            {
-                //element.status = AppDef.State.Struck;
-                return true;
-            }
-        }
-        return false;
-    }
-
     // Vérifie si le bateau est coulé
     // méthode qui vérifie si le bateau est coulé
     public bool isBoatSunk()
     {
         foreach (ShipElement elt in ShipElt)
         {
-            if (elt.elt != null && elt.status != AppDef.State.Struck)
+            if (elt.coord != null && elt.status != AppDef.State.Struck)
             {
                 return false; // il reste au moins un élément du bateau à flot
             }

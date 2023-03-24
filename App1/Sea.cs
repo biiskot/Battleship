@@ -10,13 +10,13 @@ public class Sea
     public List<SeaElement> SeaElements = new List<SeaElement>();
     public int Row { get; set; }
     public int Col { get; set; }
-    private MainPage MainP;
+    private PlayScreen screenGame;
     private SeaElement[,] seaGrid;
-    public Sea(int row, int col, MainPage main)
+    public Sea(int row, int col, PlayScreen playscreen)
     {
         Row = row;
         Col = col;
-        MainP = main;
+        screenGame = playscreen;
         int ellipseWidth = AppDef.largeurMer / row;
         int ellipseHeight = AppDef.hauteurMer / col;
         int leftMargin = 0, rightMargin = 0, topMargin = 0, bottomMargin = 0;
@@ -28,7 +28,7 @@ public class Sea
         {
             for (int j = 0; j < col; j++)
             {
-                seaGrid[i, j] = new SeaElement(new Point(i, j));
+                seaGrid[i, j] = new SeaElement(new Thickness(3),i, j,AppDef.largeurMer/AppDef.nbCol, AppDef.hauteurMer / AppDef.nbRow, 5);
             }
         }
         // ...
@@ -47,9 +47,9 @@ public class Sea
             impactPoint = SeaElements.Find(sealElement => sealElement.ellipse == ellipse);
             if (impactPoint != null)
             {
-
+                code = screenGame.battleshipField.ProcessStrike(new Guid(),impactPoint);
             }
-            // ...
+      
         }
         catch (Exception ex)
         {
