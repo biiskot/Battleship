@@ -134,10 +134,19 @@ public class BattleShipField
         return AppDef.State.Afloat;
     }
 
-   
 
-
-    public void StartGame()
+    public AppDef.PlayerStatus GetPlayerStatus(Guid PID)
+    {
+        foreach(Player player in playersList)
+        {
+            if(player.PlayerID == PID)
+            {
+                return player.Status;
+            }
+        }
+        return AppDef.PlayerStatus.NotSet;
+    }
+        public void StartGame()
     {
         // Création des joueurs
         Player player1 = new Player("joueur1",10,AppDef.PlayerStatus.NotSet);

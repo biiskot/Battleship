@@ -122,8 +122,6 @@
     <Compile Include="AppDef.cs" />
     <Compile Include="BattleShipField.cs" />
     <Compile Include="Boat.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="DataEnums.cs" />
     <Compile Include="GamesManager.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

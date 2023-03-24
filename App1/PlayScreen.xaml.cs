@@ -28,14 +28,16 @@ namespace App1
         public PlayScreen()
         {
             this.InitializeComponent();
-            //On instancie nu champ de ataille à la création du PLay Screen
+            //On instancie un champ de bataille à la création du Play Screen
             try
             {
                 battleshipField = new BattleShipField();
                 sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
-                Console.WriteLine("Champ de ataille créé");
+                Console.WriteLine("Champ de bataille créé");
+                battleshipField.StartGame();
+                Console.WriteLine("Partie lancée");
             }
-            catch { }
+            catch(Exception e) { }
         }
 
         private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
@@ -43,14 +45,14 @@ namespace App1
 
         }
 
- 
-// Fait apparaitre le point d'impact en rouge quand on clique sur une ellipse
- public static void EffectuerUnTir(object sender, PointerRoutedEventArgs e)
+
+        // Fait apparaitre le point d'impact en rouge quand on clique sur une ellipse
+        public static void EffectuerUnTir(object sender, PointerRoutedEventArgs e, Sea sea)
         {
             // si une partie est en cours d'exécution
             if (GamesManager.GameStatus == AppDef.GameStatus.Running)
             {
-                AppDef.PlayerStatus playerStatus = bSF.GetPlayerStatus(myPlayerID);
+                AppDef.PlayerStatus playerStatus = BattleShipField.GetPlayerStatus(myPlayerID);
                 // si le joueur courant n'a pas encore perdu la partie
                 if (playerStatus != AppDef.PlayerStatus.Loser)
                 {
@@ -59,8 +61,7 @@ namespace App1
                     if (sender is Windows.UI.Xaml.Shapes.Ellipse)
                     {
                         (sender as Ellipse).Fill = AppDef.redBrush;
-                        // Déclenchement du tir
-                        PlayScreen.sea.FireAt(sender as Ellipse);
+                        sea.FireAt(sender as Ellipse);
                     }
                 }
 
