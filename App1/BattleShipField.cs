@@ -95,7 +95,7 @@ public class BattleShipField
     {
         foreach (var elt in boat.ShipElt)
         {
-            Point location = new Point(Prow.X + elt.elt.X, Prow.Y + elt.elt.Y);
+            Point location = new Point(boat.bow.X + elt.coord.X, boat.bow.Y + elt.coord.Y);
             MainPage.drawEllipseOnCanvas(location, AppDef.shipBrush);
         }
     }

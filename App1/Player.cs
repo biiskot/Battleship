@@ -21,4 +21,17 @@ public class Player
     // nombre de de tirs ayant touché un bateau
     private int nbStruck = 0;
     public int NbStruck { get => nbStruck; set => nbStruck = value; }
+
+    public void ShowGrid()
+    {
+
+    }
+    public void PlayTurn()
+    {
+
+    }
+    public void ShowGrid()
+    {
+
+    }
 }

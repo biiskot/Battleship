@@ -24,7 +24,7 @@ public class Boat
     public bool boolSunk;
 
     // coordonnées de la proue, avant du bateau
-    private Point bow { get;}
+    public Point bow { get;}
 
     // taille du bateau en nombre d'éléments
     public int size;
