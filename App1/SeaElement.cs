@@ -2,6 +2,7 @@
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml;
 using Windows.Foundation;
+using Windows.UI.Xaml.Input;
 
 public class SeaElement
 {
@@ -15,8 +16,12 @@ public class SeaElement
         RegenCycles = regenCycles;
         coord.X = col;
         coord.Y = row;
-        ellipse.PointerPressed += PlayScreen.EffectuerUnTir;
-        // ..
+        ellipse.PointerPressed += Ellipse_PointerPressed;
+     
+    }
+    private void Ellipse_PointerPressed(object sender, PointerRoutedEventArgs e)
+    {
+        PlayScreen.EffectuerUnTir(sender, e, PlayScreen.sea);
     }
 }
 

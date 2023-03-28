@@ -1,4 +1,5 @@
 ﻿// Le player est lui susceptible de participer à plusieurs parties en même temps.
+using App1;
 using System;
 using System.Collections.Generic;
 
@@ -26,12 +27,9 @@ public class Player
     {
 
     }
-    public void PlayTurn()
+    public AppDef.GameStatus PlayTurn()
     {
-
+          return AppDef.GameStatus.NotStarted;
     }
-    public void ShowGrid()
-    {
 
-    }
 }

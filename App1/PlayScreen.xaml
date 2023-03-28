@@ -8,8 +8,17 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <TextBlock HorizontalAlignment="Center" Margin="0,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="72" FontFamily="Arial Black" SelectionChanged="TextBlock_SelectionChanged"><Run Text="Battle"/><Run Text="S"/><Run Text="hip C# 2023"/></TextBlock>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-    </Grid>
+            <Grid x:Name="seaGrid" Width="600" Height="600">
+            </Grid>
+        </Grid>
 </Page>

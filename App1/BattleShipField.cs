@@ -9,6 +9,7 @@ using System.Linq;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Shapes;
 using App1;
+using Windows.UI.Core;
 
 // La classe BattleShipField est le moteur du jeu de bataille
 // elle ne doit pas interférer avec le rendu graphique.
@@ -29,7 +30,7 @@ public class BattleShipField
     // Level : joue sur le nombre de tirs autorisés par exemple
     public int Level { get; set; }
     // Liste des joueurs (on se limite à 1 ou deux joueurs pour l'instant)
-    private List<Player> playersList = new List<Player>();
+    private List<Player> playersList;
     // La grille de jeu
     private SeaElement[,] seaGrid;
     // La flotte qui contient les vaisseaux de tous les joueurs.
@@ -37,6 +38,8 @@ public class BattleShipField
 
     public int size;
     private int NumBoatsPerPlayer = 4;
+
+    public static Player activePlayer { get; set; }
 
 
     // si un bateau est touché, il faut le retrouver et marquer un de ses éléments 'touché' et
@@ -49,9 +52,9 @@ public class BattleShipField
         for (int i = 0; i < NumBoatsPerPlayer; i++)
         {
             bool positionFound = false;
-            Boat boat;
             while (!positionFound)
             {
+                Boat boat = null;
                 // On crée un nouveau bateau avec une taille aléatoire
                 int boatSize = val.Next(2, 5);
                 // calcul d'une position aléatoire
@@ -61,10 +64,9 @@ public class BattleShipField
                 int heading = val.Next(360);
 
                 
-                boat = new Boat(boatSize,player.PlayerID,new Point(posX,posY));
+                boat = new Boat(boatSize,player.PlayerID,new Point(posX,posY),heading);
                
-               
-                boat.Heading = heading;
+              
                 // test la collision de deux bateaux, utile pour le placement
                 bool collision = false;
                 foreach (Boat existingBoat in existingBoats)
@@ -79,11 +81,11 @@ public class BattleShipField
                 {
                     positionFound = true;
                 }
+                // On ajoute le bateau à la liste des bateaux du joueur
+                player.BoatList.Add(boat);
+                // On ajoute le bateau à la liste globale de tous les bateaux
+                boatList.Add(boat);
             }
-            // On ajoute le bateau à la liste des bateaux du joueur
-            player.BoatList.Add(boat);
-            // On ajoute le bateau à la liste globale de tous les bateaux
-            boatList.Add(boat);
         }
     }
 
@@ -96,7 +98,7 @@ public class BattleShipField
         foreach (var elt in boat.ShipElt)
         {
             Point location = new Point(boat.bow.X + elt.coord.X, boat.bow.Y + elt.coord.Y);
-            MainPage.drawEllipseOnCanvas(location, AppDef.shipBrush);
+            //PlayScreen.printShipElement(location as Ellipse, boat.PlayerID, elt.status);
         }
     }
 
@@ -135,9 +137,9 @@ public class BattleShipField
     }
 
 
-    public AppDef.PlayerStatus GetPlayerStatus(Guid PID)
+    public static AppDef.PlayerStatus GetPlayerStatus(Guid PID,List<Player> players)
     {
-        foreach(Player player in playersList)
+        foreach(Player player in players)
         {
             if(player.PlayerID == PID)
             {
@@ -146,15 +148,17 @@ public class BattleShipField
         }
         return AppDef.PlayerStatus.NotSet;
     }
-        public void StartGame()
+        public void StartGame(List<Player> players)
     {
-        // Création des joueurs
-        Player player1 = new Player("joueur1",10,AppDef.PlayerStatus.NotSet);
-        Player player2 = new Player("joueur2", 10, AppDef.PlayerStatus.NotSet);
+        
+        Player player1 = players[0];
+        Player player2 = players[1];
+        //on change le stats des joueurs:
 
-        // Ajout des joueurs à la liste des joueurs de la partie
-        playersList.Add(player1);
-        playersList.Add(player2);
+        playersList = players;
+        player1.Status = AppDef.PlayerStatus.NotSet;
+        player2.Status = AppDef.PlayerStatus.NotSet;
+        
 
         // Création des bateaux pour chaque joueur
         CreateBoatsForPlayer(player1, new List<Boat>());
@@ -162,10 +166,11 @@ public class BattleShipField
 
         // Initialisation du timer pour la gestion des éléments de mer touchés
         aTimer = new System.Timers.Timer(5000);
-        aTimer.Elapsed += OnTimedEvent;
+        aTimer.Elapsed += async (sender, e) => {
+            //
+        };
         aTimer.AutoReset = true;
         aTimer.Enabled = true;
-
         // Affichage de la grille pour chaque joueur
         player1.ShowGrid();
         player2.ShowGrid();
@@ -178,13 +183,16 @@ public class BattleShipField
             AppDef.GameStatus gameState = AppDef.GameStatus.NotStarted;
             while (gameState == AppDef.GameStatus.NotStarted)
             {
-                gameState = player1.PlayTurn(this);
+                player1.PlayTurn();
+                activePlayer = player1;
             }
 
             // Vérification de la fin de partie
             if (gameState == AppDef.GameStatus.Completed)
             {
                 Console.WriteLine("Le joueur 1 a gagné !");
+                player1.Status = AppDef.PlayerStatus.Winner;
+                player2.Status = AppDef.PlayerStatus.Loser;
                 gameFinished = true;
                 break;
             }
@@ -193,13 +201,16 @@ public class BattleShipField
             gameState = AppDef.GameStatus.NotStarted;
             while (gameState == AppDef.GameStatus.NotStarted)
             {
-                gameState = player2.PlayTurn(this);
+                gameState = player2.PlayTurn();
+                activePlayer= player2;
             }
 
             // Vérification de la fin de partie
             if (gameState == AppDef.GameStatus.Completed)
             {
                 Console.WriteLine("Le joueur 2 a gagné !");
+                player2.Status = AppDef.PlayerStatus.Winner;
+                player1.Status=AppDef.PlayerStatus.Loser;
                 gameFinished = true;
                 break;
             }
