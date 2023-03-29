@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Shapes;
 using App1;
 using Windows.UI.Core;
+using System.Diagnostics;
 
 // La classe BattleShipField est le moteur du jeu de bataille
 // elle ne doit pas interférer avec le rendu graphique.
@@ -29,10 +30,7 @@ public class BattleShipField
     // niveau de jeu
     // Level : joue sur le nombre de tirs autorisés par exemple
     public int Level { get; set; }
-    // Liste des joueurs (on se limite à 1 ou deux joueurs pour l'instant)
-    private List<Player> playersList;
-    // La grille de jeu
-    private SeaElement[,] seaGrid;
+ 
     // La flotte qui contient les vaisseaux de tous les joueurs.
     public List<Boat> boatList = new List<Boat>();
 
@@ -41,10 +39,13 @@ public class BattleShipField
 
     public static Player activePlayer { get; set; }
 
+    // Liste des joueurs (on se limite à 1 ou deux joueurs pour l'instant)
+    private List<Player> playersList = new List<Player>();
+
 
     // si un bateau est touché, il faut le retrouver et marquer un de ses éléments 'touché' et
     // vérifier s'il n'est pas coulé
-  
+
     // A compléter avec toutes les méthodes utiles …
     // Création de l'ensemble des bateaux de chaque joueur
     public void CreateBoatsForPlayer(Player player, List<Boat> existingBoats)
@@ -81,10 +82,16 @@ public class BattleShipField
                 {
                     positionFound = true;
                 }
-                // On ajoute le bateau à la liste des bateaux du joueur
-                player.BoatList.Add(boat);
-                // On ajoute le bateau à la liste globale de tous les bateaux
-                boatList.Add(boat);
+                try
+                {
+                    // On ajoute le bateau à la liste des bateaux du joueur
+                    player.BoatList.Add(boat);
+                    // On ajoute le bateau à la liste globale de tous les bateaux
+                    boatList.Add(boat);
+                }
+                catch (Exception e){
+                    Debug.WriteLine(e.ToString());
+                }
             }
         }
     }
@@ -133,6 +140,7 @@ public class BattleShipField
                 }
             }
         }
+        impactedSeaElements.Add(strikeElt);
         return AppDef.State.Afloat;
     }
 
@@ -148,73 +156,6 @@ public class BattleShipField
         }
         return AppDef.PlayerStatus.NotSet;
     }
-        public void StartGame(List<Player> players)
-    {
-        
-        Player player1 = players[0];
-        Player player2 = players[1];
-        //on change le stats des joueurs:
-
-        playersList = players;
-        player1.Status = AppDef.PlayerStatus.NotSet;
-        player2.Status = AppDef.PlayerStatus.NotSet;
-        
-
-        // Création des bateaux pour chaque joueur
-        CreateBoatsForPlayer(player1, new List<Boat>());
-        CreateBoatsForPlayer(player2, player1.BoatList);
-
-        // Initialisation du timer pour la gestion des éléments de mer touchés
-        aTimer = new System.Timers.Timer(5000);
-        aTimer.Elapsed += async (sender, e) => {
-            //
-        };
-        aTimer.AutoReset = true;
-        aTimer.Enabled = true;
-        // Affichage de la grille pour chaque joueur
-        player1.ShowGrid();
-        player2.ShowGrid();
-
-        // Boucle de jeu jusqu'à la fin de la partie
-        bool gameFinished = false;
-        while (!gameFinished)
-        {
-            // Tour du joueur 1
-            AppDef.GameStatus gameState = AppDef.GameStatus.NotStarted;
-            while (gameState == AppDef.GameStatus.NotStarted)
-            {
-                player1.PlayTurn();
-                activePlayer = player1;
-            }
-
-            // Vérification de la fin de partie
-            if (gameState == AppDef.GameStatus.Completed)
-            {
-                Console.WriteLine("Le joueur 1 a gagné !");
-                player1.Status = AppDef.PlayerStatus.Winner;
-                player2.Status = AppDef.PlayerStatus.Loser;
-                gameFinished = true;
-                break;
-            }
-
-            // Tour du joueur 2
-            gameState = AppDef.GameStatus.NotStarted;
-            while (gameState == AppDef.GameStatus.NotStarted)
-            {
-                gameState = player2.PlayTurn();
-                activePlayer= player2;
-            }
-
-            // Vérification de la fin de partie
-            if (gameState == AppDef.GameStatus.Completed)
-            {
-                Console.WriteLine("Le joueur 2 a gagné !");
-                player2.Status = AppDef.PlayerStatus.Winner;
-                player1.Status=AppDef.PlayerStatus.Loser;
-                gameFinished = true;
-                break;
-            }
-        }
-    }
+    
 
 }

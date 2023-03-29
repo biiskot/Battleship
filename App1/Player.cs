@@ -16,6 +16,7 @@ public class Player
         Pseudo = pseudo;
         RemainStrike = strikeCredit;
         Status = status;
+        BoatList = new List<Boat>();
     }
     // nombre de tirs restants pour le joueur
     public int RemainStrike { get; set; }

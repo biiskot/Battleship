@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml;
 using System;
+using System.Diagnostics;
 
 // Gestion de l'affichage de la mer pour un joueur
 public class Sea
@@ -11,7 +12,7 @@ public class Sea
     public int Row { get; set; }
     public int Col { get; set; }
     private PlayScreen screenGame;
-    private SeaElement[,] seaGrid;
+    public SeaElement[,] seaGrid;
     public Sea(int row, int col, PlayScreen playscreen)
     {
         Row = row;
@@ -31,6 +32,8 @@ public class Sea
                 seaGrid[i, j] = new SeaElement(new Thickness(3),i, j,AppDef.largeurMer/AppDef.nbCol, AppDef.hauteurMer / AppDef.nbRow, 5);
             }
         }
+        Debug.WriteLine("constrcteur Sea");
+        Debug.WriteLine(seaGrid.Length);
         // ...
     }
     // méthode chargée de retouver l'élément de mer atteint
