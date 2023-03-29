@@ -88,7 +88,7 @@ public class Sea
         //Si non, tour siuvant, on change d'activePlayer
 
         GamesManager.activePlayer = GamesManager.getOponentPlayerObject(GamesManager.activePlayer.PlayerID,GamesManager.playerList);
-        Debug.WriteLine("Le joueur actif est : " + GamesManager.activePlayer.PlayerID);
+        Debug.WriteLine("Le joueur actif est : " + GamesManager.activePlayer.Pseudo);
     }
     // redessin de la mer en bleu
     public void Repaint()
