@@ -36,8 +36,5 @@ public class Player
           return AppDef.GameStatus.NotStarted;
     }
 
-    public void incrementScore()
-    {
-        nbStruck++;
-    }
+
 }

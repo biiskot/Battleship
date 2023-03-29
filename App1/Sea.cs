@@ -75,7 +75,12 @@ public class Sea
         else if (code == AppDef.State.Struck)
         {
             Debug.WriteLine("Le tir a touché un shipelem");
-            GamesManager.activePlayer.incrementScore();
+            GamesManager.activePlayer.NbStruck += 1;
+        }
+        else
+        {
+            Debug.WriteLine("code n'a pas de valeur retournée");
+
         }
 
         //On vérifie si le joueur a gagné

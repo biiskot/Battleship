@@ -106,7 +106,7 @@ namespace App1
                     {
                         (sender as Ellipse).Fill = AppDef.redBrush;
                         sea.FireAt(sender as Ellipse);
-                        Debug.WriteLine("Le joueur " + GamesManager.activePlayer.ToString() + " a tiré");
+                        Debug.WriteLine("Le joueur " + GamesManager.activePlayer.Pseudo + " a tiré");
                     }
                 }
             }
