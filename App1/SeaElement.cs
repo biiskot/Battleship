@@ -14,9 +14,13 @@ public class SeaElement
     public Ellipse ellipse { get; set; }
     public Point coord;
     public int RegenCycles;
+    public int row { get; set; }
+    public int col { get; set; }
     public SeaElement(Thickness thic, int row, int col, int width, int height, int regenCycles)
     {
         RegenCycles = regenCycles;
+        this.col = col;
+        this.row = row;
         coord.X = col;
         coord.Y = row;
 
@@ -31,7 +35,7 @@ public class SeaElement
     private void Ellipse_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
         Debug.WriteLine("Ellipse_PointerPressed()");
-        PlayScreen.EffectuerUnTir(sender, e, PlayScreen.sea);
+        PlayScreen.EffectuerUnTir(sender, e, GamesManager.sea);
     }
 }
 

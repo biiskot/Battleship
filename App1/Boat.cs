@@ -10,7 +10,7 @@ public struct ShipElement
     public Point coord;
     // besoin d'autre chose?
 
-    public void changeElementStatus(AppDef.State state)
+    public void changeShipElementStatus(AppDef.State state)
     {
         status = state;
     }

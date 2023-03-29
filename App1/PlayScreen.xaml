@@ -10,7 +10,7 @@
 
         
 
-<Grid x:Name="seaGrid" Width="600" Height="600" Grid.ColumnSpan="2" Margin="450,200,450,200" Grid.RowSpan="2">
+<Grid x:Name="seaGridXML" Width="1200" Height="1200" Grid.ColumnSpan="2" Margin="450,200,450,200" Grid.RowSpan="2">
 </Grid>
         
 </Page>

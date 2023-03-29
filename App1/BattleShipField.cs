@@ -17,10 +17,7 @@ using System.Diagnostics;
 // elle permet d'instancier une partie
 public class BattleShipField
 {
-    // identifiant de la partie
-    private Guid gameID;
-    // Déclaration d'un timer pour faire repasser les points d'impact au bleu
-    private System.Timers.Timer aTimer;
+    
     // Liste des éléments de mer qui ont été touchés qui doivent repasser au 'bleu' au bout d'un certain temps
     // Utilisation d'une collection de données Safe-Thread afin d'éviter les conflits d'accès concurrents
     // il faut détruire manuellement cette collection quand elle n'est plus utilisée (méthode Dispose dans finalizer)
@@ -37,10 +34,6 @@ public class BattleShipField
     public int size;
     private int NumBoatsPerPlayer = 4;
 
-    public static Player activePlayer { get; set; }
-
-    // Liste des joueurs (on se limite à 1 ou deux joueurs pour l'instant)
-    private List<Player> playersList = new List<Player>();
 
 
     // si un bateau est touché, il faut le retrouver et marquer un de ses éléments 'touché' et
@@ -122,7 +115,7 @@ public class BattleShipField
     // Gestion du tir effectué par un joueur sur un élément de mer :
     public AppDef.State ProcessStrike(Guid playerID, SeaElement strikeElt)
     {
-
+        Debug.WriteLine("BSF.ProcessStike()");
         // il faut mettre à jour l'état des bateaux
         // Mettre en place la gestion du level et des tirs restants pour les joueurs
         // et décider de la fin de la partie
@@ -135,7 +128,8 @@ public class BattleShipField
                 if (element.coord == strikeElt.coord)        //Si shipElement à l'emplacement du seaElement touché :
                 {
 
-                    element.changeElementStatus(AppDef.State.Struck);   //Si element touché, on change son statut
+                    element.changeShipElementStatus(AppDef.State.Struck);   //Si element touché, on change son statut
+                    boat.status = AppDef.State.Struck;
                     return AppDef.State.Struck;
                 }
             }

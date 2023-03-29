@@ -26,27 +26,28 @@ namespace App1
     public sealed partial class PlayScreen : Page
     {
         public BattleShipField battleshipField;
-        public static Sea sea;
+
         public PlayScreen()
         {
             this.InitializeComponent();
             Background = new SolidColorBrush(Windows.UI.Colors.AntiqueWhite);
-            sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
+            GamesManager.sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
             SeaElement seaElement;
             // Créer une grille de 20x20 instances de SeaElement
-            for (int row = 0; row < 20; row++)
+            for (int row = 0; row < AppDef.nbRow; row++)
             {
-                for (int col = 0; col < 20; col++)
+                for (int col = 0; col < AppDef.nbCol; col++)
                 {
                     // Remplacer les paramètres du constructeur par les valeurs appropriées pour votre jeu
-                    seaElement = sea.seaGrid[row, col];
+                    seaElement = GamesManager.sea.seaGrid[row, col];
 
                     // Ajouter l'ellipse de l'instance de SeaElement à la grille
-                    seaGrid.Children.Add(seaElement.ellipse);
-
+                    seaGridXML.Children.Add(seaElement.ellipse);
+                    
                     // Définir la position de l'ellipse dans la grille
-                    Grid.SetRow(seaElement.ellipse, row);
-                    Grid.SetColumn(seaElement.ellipse, col);
+                    Grid.SetRow(seaElement.ellipse, seaElement.row);
+                    Grid.SetColumn(seaElement.ellipse, seaElement.col);
+
                 }
             }
             
@@ -57,17 +58,23 @@ namespace App1
                 // Création des joueurs
                 Player player1 = new Player("joueur1", 10, AppDef.PlayerStatus.NotSet);
                 Player player2 = new Player("joueur2", 10, AppDef.PlayerStatus.NotSet);
-                List<Player> playerList = new List<Player>();
-                playerList.Add(player1);
-                playerList.Add(player2);
+                GamesManager.playerList = new List<Player>
+                {
+                    player1,
+                    player2
+                };
 
                 // Création du champ de bataille
                 battleshipField = new BattleShipField();
-                sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
+                GamesManager.sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
 
                 Debug.WriteLine("Champ de bataille créé");
-                //this.StartGame(playerList,battleshipField);
+                
                 Debug.WriteLine("Partie lancée");
+                GamesManager.GameStatus = AppDef.GameStatus.Running;
+
+                Debug.WriteLine("C'est au joueur 1 de commencer");
+                GamesManager.activePlayer = GamesManager.playerList[0];
             }
             catch(Exception e) {
                 Debug.WriteLine(e.ToString());
@@ -87,9 +94,9 @@ namespace App1
             // si une partie est en cours d'exécution
             if (GamesManager.GameStatus == AppDef.GameStatus.Running)
             {
-
-                /*
-                AppDef.PlayerStatus playerStatus = BattleShipField.GetPlayerStatus(BattleShipField.activePlayer);
+                Debug.WriteLine("Le partie est bien lancée.");
+                
+                AppDef.PlayerStatus playerStatus = GamesManager.activePlayer.Status;
                 // si le joueur courant n'a pas encore perdu la partie
                 if (playerStatus != AppDef.PlayerStatus.Loser)
                 {
@@ -99,15 +106,9 @@ namespace App1
                     {
                         (sender as Ellipse).Fill = AppDef.redBrush;
                         sea.FireAt(sender as Ellipse);
+                        Debug.WriteLine("Le joueur " + GamesManager.activePlayer.ToString() + " a tiré");
                     }
                 }
-                */
-                if (sender is Windows.UI.Xaml.Shapes.Ellipse)
-                {
-                    (sender as Ellipse).Fill = AppDef.redBrush;
-                    sea.FireAt(sender as Ellipse);
-                }
-
             }
 
 
@@ -120,12 +121,16 @@ namespace App1
         }
         public void StartGame(List<Player> players, BattleShipField bsf)
         {
+            
             Debug.WriteLine("battleShipField.startGame()");
+
+            GamesManager.GameStatus = AppDef.GameStatus.Running;
+
+            //GamesManager.GameGuid = new Random()
+
             Player player1 = players[0];
             Player player2 = players[1];
             //on change le stats des joueurs:
-
-            Player activePlayer = null;
 
 
             player1.Status = AppDef.PlayerStatus.NotSet;
@@ -135,7 +140,6 @@ namespace App1
             // Création des bateaux pour chaque joueur
             bsf.CreateBoatsForPlayer(player1, new List<Boat>());
             bsf.CreateBoatsForPlayer(player2, player1.BoatList);
-
 
             /*
                     // Initialisation du timer pour la gestion des éléments de mer touchés
@@ -147,50 +151,46 @@ namespace App1
                     aTimer.Enabled = true;
 
             */
+
             // Affichage de la grille pour chaque joueur
             player1.ShowGrid();
             player2.ShowGrid();
 
+
             // Boucle de jeu jusqu'à la fin de la partie
-            bool gameFinished = false;
-            while (!gameFinished)
+            while (GamesManager.GameStatus == AppDef.GameStatus.Running)
             {
-                // Tour du joueur 1
-                AppDef.GameStatus gameState = AppDef.GameStatus.NotStarted;
-                while (gameState == AppDef.GameStatus.NotStarted)
+                if(GamesManager.activePlayer == player1)
                 {
                     player1.PlayTurn();
-                    activePlayer = player1;
+                    GamesManager.activePlayer = player2;
+                }
+                else if(GamesManager.activePlayer == player2)
+                {
+                    player2.PlayTurn();
+                    GamesManager.activePlayer = player1;
                 }
 
                 // Vérification de la fin de partie
-                if (gameState == AppDef.GameStatus.Completed)
+                if (GamesManager.GameStatus == AppDef.GameStatus.Completed)
                 {
-                    Console.WriteLine("Le joueur 1 a gagné !");
-                    player1.Status = AppDef.PlayerStatus.Winner;
-                    player2.Status = AppDef.PlayerStatus.Loser;
-                    gameFinished = true;
-                    break;
+                    if (GamesManager.activePlayer == player1)
+                    {
+                        Console.WriteLine("Le joueur 2 a gagné !");
+                        {
+                            player2.Status = AppDef.PlayerStatus.Winner;
+                            player1.Status = AppDef.PlayerStatus.Loser;
+                        }
+                    }
+                    else if (GamesManager.activePlayer == player2)
+                    {
+                        Console.WriteLine("Le joueur 1 a gagné !");
+                        player1.Status = AppDef.PlayerStatus.Winner;
+                        player2.Status = AppDef.PlayerStatus.Loser;
+                        //gameFinished = true;
+                    }
                 }
-
-                // Tour du joueur 2
-                gameState = AppDef.GameStatus.NotStarted;
-                while (gameState == AppDef.GameStatus.NotStarted)
-                {
-                    gameState = player2.PlayTurn();
-                    activePlayer = player2;
-                }
-
-                // Vérification de la fin de partie
-                if (gameState == AppDef.GameStatus.Completed)
-                {
-                    Console.WriteLine("Le joueur 2 a gagné !");
-                    player2.Status = AppDef.PlayerStatus.Winner;
-                    player1.Status = AppDef.PlayerStatus.Loser;
-                    gameFinished = true;
-                    break;
-                }
-            }
+            }  
         }
     }
 }

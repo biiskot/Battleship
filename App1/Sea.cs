@@ -29,11 +29,12 @@ public class Sea
         {
             for (int j = 0; j < col; j++)
             {
-                seaGrid[i, j] = new SeaElement(new Thickness(3),i, j,AppDef.largeurMer/AppDef.nbCol, AppDef.hauteurMer / AppDef.nbRow, 5);
+                seaGrid[i, j] = new SeaElement(new Thickness(10),i, j,AppDef.largeurMer/AppDef.nbCol, AppDef.hauteurMer / AppDef.nbRow, 10);
             }
         }
-        Debug.WriteLine("constrcteur Sea");
-        Debug.WriteLine(seaGrid.Length);
+        Debug.WriteLine("constructor Sea");
+        Debug.WriteLine(seaGrid[0,0].ToString());
+        Debug.WriteLine(seaGrid[19, 19].ToString());
         // ...
     }
     // méthode chargée de retouver l'élément de mer atteint
@@ -41,6 +42,7 @@ public class Sea
     // les conséquences du tir
     public void FireAt(Ellipse ellipse)
     {
+        Debug.WriteLine("FireAt()");
         // code de retour de la méthode ProcessStrike
         AppDef.State code = 0;
         // Element de mer impacté
@@ -50,18 +52,43 @@ public class Sea
             impactPoint = SeaElements.Find(sealElement => sealElement.ellipse == ellipse);
             if (impactPoint != null)
             {
-                code = screenGame.battleshipField.ProcessStrike(new Guid(),impactPoint);
+                code = screenGame.battleshipField.ProcessStrike(GamesManager.activePlayer.PlayerID,impactPoint);
             }
-      
+            else {
+                Debug.WriteLine("impactPoint null");
+            }
+           
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Exception FireAt(): ", ex.Message);
+            Debug.WriteLine("Exception FireAt(): ", ex.Message);
         }
+
+        //On décrémente le n de tirs restants 
+        GamesManager.activePlayer.RemainStrike--;
+
+        //Et on incrémente le score si le tir touche un shipelem
+        if (code == AppDef.State.Afloat)
+        {
+            Debug.WriteLine("Le tir n'a pas touché de shipelem");
+        }
+        else if (code == AppDef.State.Struck)
+        {
+            Debug.WriteLine("Le tir a touché un shipelem");
+            GamesManager.activePlayer.incrementScore();
+        }
+
+        //On vérifie si le joueur a gagné
+
+        //Si non, tour siuvant, on change d'activePlayer
+
+        GamesManager.activePlayer = GamesManager.getOponentPlayerObject(GamesManager.activePlayer.PlayerID,GamesManager.playerList);
+        Debug.WriteLine("Le joueur actif est : " + GamesManager.activePlayer.PlayerID);
     }
     // redessin de la mer en bleu
     public void Repaint()
     {
+        Debug.WriteLine("Repaint()");
         foreach (var item in SeaElements)
         {
             item.ellipse.Fill = AppDef.blueBrush;
