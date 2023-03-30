@@ -27,6 +27,7 @@ public class SeaElement
         //ellipse.Name = ellipse.Name;
         ellipse = new Ellipse();
         ellipse.Fill = AppDef.blueBrush;
+        ellipse.Name = "ellipse_"+row.ToString()+"_"+col.ToString();
         ellipse.Height = height;
         ellipse.Width = width;
 

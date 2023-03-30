@@ -52,4 +52,3 @@ public static class GamesManager
         return finished;
     }
 }
-// Cl

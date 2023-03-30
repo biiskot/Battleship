@@ -41,7 +41,7 @@ public class BattleShipField
 
     // A compléter avec toutes les méthodes utiles …
     // Création de l'ensemble des bateaux de chaque joueur
-    public void CreateBoatsForPlayer(Player player, List<Boat> existingBoats)
+    public void CreateBoatsForPlayer(Player player)
     {
         for (int i = 0; i < NumBoatsPerPlayer; i++)
         {
@@ -63,7 +63,7 @@ public class BattleShipField
               
                 // test la collision de deux bateaux, utile pour le placement
                 bool collision = false;
-                foreach (Boat existingBoat in existingBoats)
+                foreach (Boat existingBoat in boatList)
                 {
                     if (boat.CollidesWith(existingBoat))
                     {

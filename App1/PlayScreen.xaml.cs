@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -44,15 +45,12 @@ namespace App1
 
                     // Ajouter l'ellipse de l'instance de SeaElement à la grille
                     seaGridXML.Children.Add(seaElement.ellipse);
-                   
                     
                     // Définir la position de l'ellipse dans la grille
                     Grid.SetRow(seaElement.ellipse, seaElement.row);
                     Grid.SetColumn(seaElement.ellipse, seaElement.col);
                 }
-            }
-            
-            
+            }     
 
             //On instancie un champ de bataille à la création du Play Screen
             try
@@ -70,6 +68,9 @@ namespace App1
                 battleshipField = new BattleShipField();
                 GamesManager.sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
 
+                battleshipField.CreateBoatsForPlayer(player1);
+                battleshipField.CreateBoatsForPlayer(player2);
+
                 Debug.WriteLine("Champ de bataille créé");
                 
                 Debug.WriteLine("Partie lancée");
@@ -78,16 +79,19 @@ namespace App1
                 Debug.WriteLine("C'est au joueur 1 de commencer");
                 GamesManager.activePlayer = GamesManager.playerList[0];
             }
+
             catch(Exception e) {
                 Debug.WriteLine(e.ToString());
             }
+
+            j1Tirs.Text = GamesManager.playerList[0].NbStruck.ToString();
+            j2Tirs.Text = GamesManager.playerList[0].NbStruck.ToString();
         }
 
         private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
         {
 
         }
-
 
         // Fait apparaitre le point d'impact en rouge quand on clique sur une ellipse
         public static void EffectuerUnTir(object sender, PointerRoutedEventArgs e, Sea sea)
@@ -110,7 +114,8 @@ namespace App1
                         (sender as Ellipse).Fill = AppDef.redBrush;
                         Debug.WriteLine("Le joueur " + GamesManager.activePlayer.Pseudo + " envoie un tir");
                         sea.FireAt(sender as Ellipse);
-                        
+
+                       
                     }
                 }
             }

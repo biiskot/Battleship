@@ -24,12 +24,14 @@ public class Sea
         Thickness thic = new Thickness(leftMargin, topMargin, rightMargin, bottomMargin);
 
         seaGrid = new SeaElement[row, col];
-
+        SeaElement tmpElt;
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < col; j++)
             {
-                seaGrid[i, j] = new SeaElement(new Thickness(10),i, j,AppDef.largeurMer/AppDef.nbCol, AppDef.hauteurMer / AppDef.nbRow, 10);
+                tmpElt = new SeaElement(new Thickness(10),i, j,AppDef.largeurMer/AppDef.nbCol, AppDef.hauteurMer / AppDef.nbRow, 10);
+                seaGrid[i, j] = tmpElt;
+                SeaElements.Add(tmpElt);
             }
         }
         Debug.WriteLine("constructor Sea");
@@ -47,30 +49,29 @@ public class Sea
 
         // Element de mer impacté
         SeaElement impactPoint;
-        try
-        {
-            impactPoint = SeaElements.Find(sealElement => sealElement.ellipse == ellipse);
+      
+        impactPoint = SeaElements.Find(sealElement => sealElement.ellipse == ellipse);
 
-            foreach (SeaElement elt in SeaElements)
-            {
-                Debug.WriteLine(elt.ellipse.Name);
-            }
-            if (impactPoint != null)
-            {
-                code = screenGame.battleshipField.ProcessStrike(GamesManager.activePlayer.PlayerID,impactPoint);
-                Debug.WriteLine("impactPoint not null");
-                Debug.WriteLine(impactPoint.col);
-                Debug.WriteLine(impactPoint.row);
-            }
-            else {
-                Debug.WriteLine("impactPoint null");
-            }
-           
-        }
-        catch (Exception ex)
+        foreach (SeaElement elt in SeaElements)
         {
-            Debug.WriteLine("Exception FireAt(): ", ex.Message);
+            if (ellipse.Name == elt.ellipse.Name)
+            {
+                Debug.WriteLine("ellipse.Name == elt.ellipse.Name");
+                impactPoint = elt;
+            }
         }
+
+        if (impactPoint != null)
+        {
+            code = screenGame.battleshipField.ProcessStrike(GamesManager.activePlayer.PlayerID,impactPoint);
+            Debug.WriteLine("impactPoint not null");
+            Debug.WriteLine(impactPoint.col);
+            Debug.WriteLine(impactPoint.row);
+        }
+        else {
+            Debug.WriteLine("impactPoint null");
+        }
+      
 
         //On décrémente le n de tirs restants 
         GamesManager.activePlayer.RemainStrike--;

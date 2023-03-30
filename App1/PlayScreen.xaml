@@ -10,27 +10,19 @@
 
 
     <Grid x:Name="pageGrid"  Width="1280" Height="720">
-
-
         <Border BorderBrush="Black" BorderThickness="1">
             <Grid Margin="9,185,1038,250">
-                <TextBlock x:Name="j1Placeholder" HorizontalAlignment="Left" TextWrapping="Wrap" Text="j1Placeholder" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold"/>
-                <TextBlock x:Name="j1Score" HorizontalAlignment="Left" TextWrapping="Wrap" Text="j1Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="79" FontWeight="Bold"/>
-         
-                <TextBlock x:Name="j2Placeholder" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="j2Placeholder" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" FontFamily="Franklin Gothic Medium" Foreground="#FF00197C" FontWeight="Bold"/>
-                <TextBlock x:Name="j2Score" HorizontalAlignment="Left" TextWrapping="Wrap" Text="j2Score" VerticalAlignment="Center" FontSize="16" Height="41" Width="79" FontWeight="Bold"/>
+                <TextBlock x:Name="j1Placeholder" HorizontalAlignment="Left" TextWrapping="Wrap" Text="j1Placeholder" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold" Margin="27,10,0,0"/>
+                <TextBlock x:Name="j1Score" HorizontalAlignment="Center" TextWrapping="Wrap" Text="j1Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="79" FontWeight="Bold" Margin="0,69,0,0"/>
+
+                <TextBlock x:Name="j2Placeholder" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="j2Placeholder" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" FontFamily="Franklin Gothic Medium" Foreground="#FF00197C" FontWeight="Bold" Margin="27,153,0,0"/>
+                <TextBlock x:Name="j2Score" HorizontalAlignment="Center" TextWrapping="Wrap" Text="j2Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="79" FontWeight="Bold" Margin="0,213,0,0"/>
             </Grid>
         </Border>
 
-        <Border BorderBrush="Black" BorderThickness="1">
-          
-                <TextBlock HorizontalAlignment="Left" Margin="53,453,0,0" TextWrapping="Wrap" Text="Tirs restants :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold"/>
-                <TextBlock x:Name="j1Tirs" HorizontalAlignment="Left" Margin="94,507,0,0" TextWrapping="Wrap" Text="j1Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="79" FontWeight="Bold"/>
-                <TextBlock x:Name="j2Tirs" HorizontalAlignment="Left" Margin="94,557,0,0" TextWrapping="Wrap" Text="j2Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="79" FontWeight="Bold"/>
-           
-        </Border>
-
-
+        <TextBlock HorizontalAlignment="Left" Margin="39,478,0,0" TextWrapping="Wrap" Text="Tirs restants :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold"/>
+        <TextBlock x:Name="j1Tirs" HorizontalAlignment="Left" Margin="73,512,0,0" TextWrapping="Wrap" Text="j1Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="79" FontWeight="Bold"/>
+        <TextBlock x:Name="j2Tirs" HorizontalAlignment="Left" Margin="73,558,0,0" TextWrapping="Wrap" Text="j2Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="79" FontWeight="Bold"/>
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="seaGridXML" Width="610" Height="610"  Margin="0,87,0,0">
 
@@ -84,6 +76,7 @@
         </Grid>
         <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="BattleShip C# UWP" VerticalAlignment="Top" FontSize="36" FontFamily="Impact" FocusVisualPrimaryBrush="#FFCD9BCF" Foreground="#FF67238F" Opacity="0.75"/>
         <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Margin="1190,657,0,0" FontSize="10" Opacity="0.8"><Run Text="CONTOIS Gabriel "/><LineBreak/><Run Text="GARCIA Mateo "/><LineBreak/><Run Text="VANBAELINGHEM Baptiste"/></TextBlock>
+        <Button Content="Afficher les bateaux" Margin="1112,614,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>
