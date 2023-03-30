@@ -76,7 +76,7 @@
         </Grid>
         <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="BattleShip C# UWP" VerticalAlignment="Top" FontSize="36" FontFamily="Impact" FocusVisualPrimaryBrush="#FFCD9BCF" Foreground="#FF67238F" Opacity="0.75"/>
         <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Margin="1190,657,0,0" FontSize="10" Opacity="0.8"><Run Text="CONTOIS Gabriel "/><LineBreak/><Run Text="GARCIA Mateo "/><LineBreak/><Run Text="VANBAELINGHEM Baptiste"/></TextBlock>
-        <Button Content="Afficher les bateaux" Margin="1112,614,0,0" VerticalAlignment="Top"/>
+        <Button Content="Afficher les bateaux" Margin="1112,614,0,0" VerticalAlignment="Top" Click="BattleShipField.show"/>
 
     </Grid>
 </Page>
