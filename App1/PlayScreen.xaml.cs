@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -43,13 +44,14 @@ namespace App1
 
                     // Ajouter l'ellipse de l'instance de SeaElement à la grille
                     seaGridXML.Children.Add(seaElement.ellipse);
+                   
                     
                     // Définir la position de l'ellipse dans la grille
                     Grid.SetRow(seaElement.ellipse, seaElement.row);
                     Grid.SetColumn(seaElement.ellipse, seaElement.col);
-
                 }
             }
+            
             
 
             //On instancie un champ de bataille à la création du Play Screen
