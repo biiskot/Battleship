@@ -43,6 +43,7 @@ public class Sea
     public void FireAt(Ellipse ellipse)
     {
         Debug.WriteLine("FireAt()");
+        
         // code de retour de la méthode ProcessStrike
         AppDef.State code = 0;
         // Element de mer impacté
@@ -53,6 +54,9 @@ public class Sea
             if (impactPoint != null)
             {
                 code = screenGame.battleshipField.ProcessStrike(GamesManager.activePlayer.PlayerID,impactPoint);
+                Debug.WriteLine("impactPoint not null");
+                Debug.WriteLine(impactPoint.col);
+                Debug.WriteLine(impactPoint.row);
             }
             else {
                 Debug.WriteLine("impactPoint null");
@@ -84,11 +88,17 @@ public class Sea
         }
 
         //On vérifie si le joueur a gagné
+        if (!GamesManager.isGameFinished(GamesManager.playerList))
+        {
+            //Si personne n'a win, tour suivant, on change d'activePlayer
 
-        //Si non, tour siuvant, on change d'activePlayer
-
-        GamesManager.activePlayer = GamesManager.getOponentPlayerObject(GamesManager.activePlayer.PlayerID,GamesManager.playerList);
-        Debug.WriteLine("Le joueur actif est : " + GamesManager.activePlayer.Pseudo);
+            GamesManager.activePlayer = GamesManager.getOponentPlayerObject(GamesManager.activePlayer.PlayerID, GamesManager.playerList);
+            Debug.WriteLine("Le joueur actif est : " + GamesManager.activePlayer.Pseudo);
+        }
+        else
+        {
+            
+        }
     }
     // redessin de la mer en bleu
     public void Repaint()

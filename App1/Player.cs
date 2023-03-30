@@ -2,6 +2,7 @@
 using App1;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class Player
 {
@@ -26,15 +27,27 @@ public class Player
         RemainStrike = 10;
     }
     
+    public bool isAllMyBoatsSunk()
+    {
+        bool allSunk = true;
+        
+        foreach (Boat boat in BoatList)
+        {
+            if (!boat.isBoatSunk())
+            {
+                allSunk = false;
+            }
+            else
+            {
+                Debug.WriteLine("Bateau de " + boat.Owner + " est coulé");
+            }
+        }
+        return allSunk;
+    }
 
     public void ShowGrid()
     {
 
     }
-    public AppDef.GameStatus PlayTurn()
-    {
-          return AppDef.GameStatus.NotStarted;
-    }
-
 
 }

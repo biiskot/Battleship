@@ -114,11 +114,14 @@ namespace App1
 
         }
 
-        public static void printShipElement(Ellipse ellipse, RoutedEventArgs e)
+        public static void displayShipElement(Ellipse ellipse, RoutedEventArgs e)
         {
 
            ellipse.Fill = AppDef.pinkBrush;
         }
+
+
+        /*
         public void StartGame(List<Player> players, BattleShipField bsf)
         {
             
@@ -141,7 +144,7 @@ namespace App1
             bsf.CreateBoatsForPlayer(player1, new List<Boat>());
             bsf.CreateBoatsForPlayer(player2, player1.BoatList);
 
-            /*
+            
                     // Initialisation du timer pour la gestion des éléments de mer touchés
                     aTimer = new System.Timers.Timer(5000);
                     aTimer.Elapsed += async (sender, e) => {
@@ -150,7 +153,7 @@ namespace App1
                     aTimer.AutoReset = true;
                     aTimer.Enabled = true;
 
-            */
+            
 
             // Affichage de la grille pour chaque joueur
             player1.ShowGrid();
@@ -190,7 +193,9 @@ namespace App1
                         //gameFinished = true;
                     }
                 }
-            }  
+            }
+                
         }
+        */
     }
 }

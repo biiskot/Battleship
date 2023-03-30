@@ -34,7 +34,9 @@ public class SeaElement
     }
     private void Ellipse_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        Debug.WriteLine("Ellipse_PointerPressed()");
+        Debug.WriteLine("Ellipse_PointerPressed() sur seaElement");
+        Debug.WriteLine(this.col);
+        Debug.WriteLine(this.row);
         PlayScreen.EffectuerUnTir(sender, e, GamesManager.sea);
     }
 }

@@ -19,6 +19,7 @@ public struct ShipElement
 public class Boat
 {
     private Guid owner { get; set; }
+    public Guid Owner { get=>owner; set => owner = value; }
 
     // le vaisseau flotte encore, est touché ou est coulé
     public bool boolSunk;
