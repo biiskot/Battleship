@@ -93,6 +93,7 @@ namespace App1
         public static void EffectuerUnTir(object sender, PointerRoutedEventArgs e, Sea sea)
         {
             Debug.WriteLine("EffectuerUnTir()");
+            Debug.WriteLine("active player : "+GamesManager.activePlayer.Pseudo);
             // si une partie est en cours d'exécution
             if (GamesManager.GameStatus == AppDef.GameStatus.Running)
             {
@@ -107,8 +108,9 @@ namespace App1
                     if (sender is Windows.UI.Xaml.Shapes.Ellipse)
                     {
                         (sender as Ellipse).Fill = AppDef.redBrush;
+                        Debug.WriteLine("Le joueur " + GamesManager.activePlayer.Pseudo + " envoie un tir");
                         sea.FireAt(sender as Ellipse);
-                        Debug.WriteLine("Le joueur " + GamesManager.activePlayer.Pseudo + " a tiré");
+                        
                     }
                 }
             }

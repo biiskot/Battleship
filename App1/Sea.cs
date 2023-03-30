@@ -33,8 +33,6 @@ public class Sea
             }
         }
         Debug.WriteLine("constructor Sea");
-        Debug.WriteLine(seaGrid[0,0].ToString());
-        Debug.WriteLine(seaGrid[19, 19].ToString());
         // ...
     }
     // méthode chargée de retouver l'élément de mer atteint
@@ -46,11 +44,17 @@ public class Sea
         
         // code de retour de la méthode ProcessStrike
         AppDef.State code = 0;
+
         // Element de mer impacté
         SeaElement impactPoint;
         try
         {
             impactPoint = SeaElements.Find(sealElement => sealElement.ellipse == ellipse);
+
+            foreach (SeaElement elt in SeaElements)
+            {
+                Debug.WriteLine(elt.ellipse.Name);
+            }
             if (impactPoint != null)
             {
                 code = screenGame.battleshipField.ProcessStrike(GamesManager.activePlayer.PlayerID,impactPoint);
@@ -93,7 +97,7 @@ public class Sea
             //Si personne n'a win, tour suivant, on change d'activePlayer
 
             GamesManager.activePlayer = GamesManager.getOponentPlayerObject(GamesManager.activePlayer.PlayerID, GamesManager.playerList);
-            Debug.WriteLine("Le joueur actif est : " + GamesManager.activePlayer.Pseudo);
+            Debug.WriteLine("Fin du tour, c'est au tour de " + GamesManager.activePlayer.Pseudo);
         }
         else
         {

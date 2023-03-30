@@ -24,6 +24,7 @@ public class SeaElement
         coord.X = col;
         coord.Y = row;
 
+        //ellipse.Name = ellipse.Name;
         ellipse = new Ellipse();
         ellipse.Fill = AppDef.blueBrush;
         ellipse.Height = height;
@@ -34,9 +35,7 @@ public class SeaElement
     }
     private void Ellipse_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        Debug.WriteLine("Ellipse_PointerPressed() sur seaElement");
-        Debug.WriteLine(this.col);
-        Debug.WriteLine(this.row);
+        Debug.WriteLine("Ellipse_PointerPressed() sur seaElement [" + this.col.ToString() + "," + this.row.ToString()+"]");
         PlayScreen.EffectuerUnTir(sender, e, GamesManager.sea);
     }
 }
