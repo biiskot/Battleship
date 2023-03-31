@@ -11,17 +11,14 @@ using Windows.UI.Xaml.Shapes;
 using App1;
 using Windows.UI.Core;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 // La classe BattleShipField est le moteur du jeu de bataille
 // elle ne doit pas interférer avec le rendu graphique.
 // elle permet d'instancier une partie
 public class BattleShipField
 {
-    
-    // Liste des éléments de mer qui ont été touchés qui doivent repasser au 'bleu' au bout d'un certain temps
-    // Utilisation d'une collection de données Safe-Thread afin d'éviter les conflits d'accès concurrents
-    // il faut détruire manuellement cette collection quand elle n'est plus utilisée (méthode Dispose dans finalizer)
-    public BlockingCollection<SeaElement> impactedSeaElements = new BlockingCollection<SeaElement>();
+
     // générateur de nombres aléatoires
     private Random val = new Random();
     // niveau de jeu
@@ -32,8 +29,7 @@ public class BattleShipField
     public List<Boat> boatList = new List<Boat>();
 
     public int size;
-    private int NumBoatsPerPlayer = 5;
-
+   
 
 
     // si un bateau est touché, il faut le retrouver et marquer un de ses éléments 'touché' et
@@ -41,9 +37,9 @@ public class BattleShipField
 
     // A compléter avec toutes les méthodes utiles …
     // Création de l'ensemble des bateaux de chaque joueur
-    public void CreateBoatsForPlayer(Player player)
+    public void CreateBoatsForPlayer(Player player,int nb)
     {
-        for (int i = 0; i < NumBoatsPerPlayer; i++)
+        for (int i = 0; i <nb; i++)
         {
             bool positionFound = false;
             while (!positionFound)
@@ -53,13 +49,12 @@ public class BattleShipField
                 int boatSize = val.Next(2, 5);
                 // calcul d'une position aléatoire
                 // calcul d'un cap aléatoire
-                int posX = val.Next(AppDef.nbCol - boatSize);
-                int posY = val.Next(AppDef.nbRow - boatSize);
-                int heading = val.Next(360);
+                int posX = val.Next(AppDef.nbCol - boatSize*2);
+                int posY = val.Next(AppDef.nbRow - boatSize*2);
+                AppDef.Cap[] caps = new AppDef.Cap[] { AppDef.Cap.N, AppDef.Cap.E, AppDef.Cap.S, AppDef.Cap.W };
+                AppDef.Cap heading = caps[val.Next(caps.Length)];
 
-                
-                boat = new Boat(boatSize,player.PlayerID,new Point(posX,posY),heading);
-               
+                boat = new Boat(boatSize,player.PlayerID,new Point(posX,posY),heading);            
               
                 // test la collision de deux bateaux, utile pour le placement
                 bool collision = false;
@@ -78,6 +73,7 @@ public class BattleShipField
                 try
                 {
                     // On ajoute le bateau à la liste des bateaux du joueur
+                    player.nbELements += boat.Size;
                     player.BoatList.Add(boat);
                     // On ajoute le bateau à la liste globale de tous les bateaux
                     boatList.Add(boat);
@@ -116,15 +112,24 @@ public class BattleShipField
 
     // Affichage des bateaux d’un joueur
     // Affichage des bateaux d'un joueur
-    public List<SeaElement> ShowAllBoats()
+    public void ShowAllBoats()
     {
-        List<SeaElement> elements = new List<SeaElement>();
         Debug.WriteLine("ShowAllBoats()");
         foreach (Boat boat in boatList)
-        { 
-            elements.AddRange(ShowBoat(boat));
+        {
+            if (GamesManager.getPlayerObject(boat.Owner) == GamesManager.playerList[0]) {
+                GamesManager.elementsJ1.AddRange(ShowBoat(boat));
+            }
+            else if(GamesManager.getPlayerObject(boat.Owner) == GamesManager.playerList[1])
+            {
+                GamesManager.elementsJ2.AddRange(ShowBoat(boat));
+            }
+            
+            else {
+                Debug.WriteLine("Pas de proprietaire trouvé");
+            }
+            
         }
-        return elements;
     }
 
     // Gestion du tir effectué par un joueur sur un élément de mer :
@@ -134,22 +139,35 @@ public class BattleShipField
         // il faut mettre à jour l'état des bateaux
         // Mettre en place la gestion du level et des tirs restants pour les joueurs
         // et décider de la fin de la partie
-
-
+     
+        GamesManager.impactedSeaElements.Add(strikeElt);
         foreach (Boat boat in boatList)
         {
             foreach(ShipElement element in boat.ShipElt)
             {
                 if (element.coord == strikeElt.coord)        //Si shipElement à l'emplacement du seaElement touché :
                 {
-
-                    element.changeShipElementStatus(AppDef.State.Struck);   //Si element touché, on change son statut
-                    boat.status = AppDef.State.Struck;
-                    return AppDef.State.Struck;
+                    if(GamesManager.getPlayerObject(boat.Owner)!=GamesManager.activePlayer)
+                    {
+                        GamesManager.log = "Le tir a touché le bateau de " + GamesManager.getPlayerObject(boat.Owner).Pseudo;
+                        element.changeShipElementStatus(AppDef.State.Struck);   //Si element touché, on change son statut
+                        strikeElt.ellipse.Fill = AppDef.pinkBrush;            //On change la couleur du seaElement
+                        boat.status = AppDef.State.Struck;
+                        boat.isBoatSunk();
+                        return AppDef.State.Struck;
+                    }
+                    else
+                    {
+                        Debug.WriteLine( "Vous ne pouvez pas tirer sur votre propre bateau");
+                    }
+                }
+                else
+                {
+                    GamesManager.log = "Le tir n'a pas touché de bateau adverse";
                 }
             }
         }
-        impactedSeaElements.Add(strikeElt);
+        
         return AppDef.State.Afloat;
     }
 

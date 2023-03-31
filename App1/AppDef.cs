@@ -83,6 +83,7 @@ public static class AppDef
     public static SolidColorBrush greenBrush = new SolidColorBrush(Windows.UI.Colors.Green);
     // Visualisation des bateaux pour deboggage
     public static SolidColorBrush pinkBrush = new SolidColorBrush(Windows.UI.Colors.DeepPink);
+    public static SolidColorBrush orangeBrush = new SolidColorBrush(Windows.UI.Colors.DarkOrange);
     // Permet de garder une référence sur l'instance de MainPage
     // pour afficher provisoirement l'emplacement des bateaux sur la mer en mode debug
     public static MainPage debugP;

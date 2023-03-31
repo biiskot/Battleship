@@ -42,6 +42,7 @@ public class Sea
     // les conséquences du tir
     public void FireAt(Ellipse ellipse)
     {
+        bool finished = false;
         Debug.WriteLine("FireAt()");
         
         // code de retour de la méthode ProcessStrike
@@ -63,7 +64,7 @@ public class Sea
         if (impactPoint != null)
         {
             code = screenGame.battleshipField.ProcessStrike(GamesManager.activePlayer.PlayerID,impactPoint);
-            Debug.WriteLine("impactPoint not null : ["+impactPoint.row.ToString()+","+impactPoint.col.ToString());
+            Debug.WriteLine("impactPoint not null : ["+impactPoint.row.ToString()+","+impactPoint.col.ToString()+"]");
         }
         else {
             Debug.WriteLine("impactPoint null");
@@ -76,11 +77,11 @@ public class Sea
         //Et on incrémente le score si le tir touche un shipelem
         if (code == AppDef.State.Afloat)
         {
-            Debug.WriteLine("Le tir n'a pas touché de shipelem");
+            
         }
         else if (code == AppDef.State.Struck)
         {
-            Debug.WriteLine("Le tir a touché un shipelem");
+            
             GamesManager.activePlayer.NbStruck += 1;
         }
         else
@@ -88,19 +89,21 @@ public class Sea
             Debug.WriteLine("code n'a pas de valeur retournée");
 
         }
-
         //On vérifie si le joueur a gagné
-        if (!GamesManager.isGameFinished(GamesManager.playerList))
-        {
-            //Si personne n'a win, tour suivant, on change d'activePlayer
+        finished = GamesManager.isGameFinished(GamesManager.playerList);
 
-            GamesManager.activePlayer = GamesManager.getOponentPlayerObject(GamesManager.activePlayer.PlayerID, GamesManager.playerList);
+      
+        if (!finished)
+        {
+            GamesManager.activePlayer = GamesManager.getOponentPlayerObject(GamesManager.activePlayer.PlayerID);
             Debug.WriteLine("Fin du tour, c'est au tour de " + GamesManager.activePlayer.Pseudo);
         }
         else
-        {
-            
+        { 
+            Debug.WriteLine("Partie terminée");
+            GamesManager.log = "Partie terminée";
         }
+     
     }
     // redessin de la mer en bleu
     public void Repaint()
@@ -109,6 +112,14 @@ public class Sea
         foreach (var item in SeaElements)
         {
             item.ellipse.Fill = AppDef.blueBrush;
+        
+        foreach (var hit in GamesManager.impactedSeaElements)
+            {
+                if (item.row == hit.row && item.col == hit.col)
+                {
+                    item.ellipse.Fill = AppDef.pinkBrush;
+                }   
+            }
         }
     }
 }

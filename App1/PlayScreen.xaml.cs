@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
+using static AppDef;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -29,8 +30,10 @@ namespace App1
     public sealed partial class PlayScreen : Page
     {
         public BattleShipField battleshipField;
+        public string j1pseudo;
+        public string j2pseudo;
 
- 
+
         public PlayScreen()
         {
             this.InitializeComponent();
@@ -53,37 +56,19 @@ namespace App1
                     Grid.SetColumn(GamesManager.sea.seaGrid[row, col].ellipse, GamesManager.sea.seaGrid[row, col].col);
                 }
             }     
+            pinkEllipse.Fill = AppDef.pinkBrush;
+            blueEllipse.Fill = AppDef.blueBrush;
+            greenEllipse.Fill = AppDef.greenBrush;
+            orangeEllipse.Fill = AppDef.orangeBrush;
 
-            //On instancie un champ de bataille à la création du Play Screen
             try
-            {
-                // Création des joueurs
-               
-
-                // Création du champ de bataille
-                battleshipField = new BattleShipField();
-                GamesManager.sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
-
-                battleshipField.CreateBoatsForPlayer(GamesManager.playerList[0]);
-                battleshipField.CreateBoatsForPlayer(GamesManager.playerList[1]);
-
-              
-              
-                Debug.WriteLine("Champ de bataille créé");
-                
-                Debug.WriteLine("Partie lancée");
-                GamesManager.GameStatus = AppDef.GameStatus.Running;
-
-                Debug.WriteLine("C'est au joueur 1 de commencer");
-                GamesManager.activePlayer = GamesManager.playerList[0];
-
-              
+            { 
                 showBoatsBtn.Click += (sender, e1) =>
                 {
-                    List<SeaElement> toDisplay = battleshipField.ShowAllBoats();
+                    battleshipField.ShowAllBoats();
                     foreach (SeaElement elt in GamesManager.sea.SeaElements)
                     {
-                        foreach (SeaElement el in toDisplay)
+                        foreach (SeaElement el in GamesManager.elementsJ1)
                         {
                             if (elt.coord == el.coord)
                             {
@@ -94,27 +79,91 @@ namespace App1
                                     Grid.SetRow(elt.ellipse, elt.row);
                                     Grid.SetColumn(elt.ellipse, elt.col);
                                 }
-                                catch(Exception ex)
+                                catch (Exception ex)
                                 {
                                     Debug.WriteLine(ex.ToString());
                                 }
-                                
+
+                            }
+                            foreach (SeaElement el2 in GamesManager.elementsJ2)
+                            {
+                                if (elt.coord == el2.coord)
+                                {
+                                    elt.ellipse.Fill = AppDef.orangeBrush;
+                                    try
+                                    {
+                                        seaGridXML.Children.Add(elt.ellipse);
+                                        Grid.SetRow(elt.ellipse, elt.row);
+                                        Grid.SetColumn(elt.ellipse, elt.col);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Debug.WriteLine(ex.ToString());
+                                    }
+
+                                }
                             }
                         }
-                       
-                        
-                        elt.ellipse.Fill = AppDef.greenBrush;
-                        Grid.SetRow(elt.ellipse, elt.row);
-                        Grid.SetColumn(elt.ellipse, elt.col);
-                        
                     }
                 };
-              
+
+                seaGridXML.Tapped += (sender, e2) =>
+                {
+                    j1Score.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].NbStruck.ToString();
+                    j2Score.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].NbStruck.ToString();
+
+                    j1Tirs.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].RemainStrike.ToString();
+                    j2Tirs.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].RemainStrike.ToString();
+
+                    logTxt.Text = GamesManager.log;
+                    tourTxt.Text = "C'est au tour de "+GamesManager.activePlayer.Pseudo + " de tirer";
+                };
+                repaintBtn.Click += (sender, e) =>
+                {
+                    GamesManager.sea.Repaint();
+                };
             }
 
             catch(Exception exp) {
                 Debug.WriteLine(exp.ToString());
             }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            
+            var parameters = JsonConvert.DeserializeObject<dynamic>(e.Parameter as string);
+
+            j1pseudo = parameters.Pseudo1;
+            j2pseudo = parameters.Pseudo2;
+            string tmp = parameters.Nbboats ;
+            GamesManager.nbBoats = Int16.Parse(tmp);
+
+            Player player1 = new Player(j1pseudo, 10, AppDef.PlayerStatus.NotSet);
+            Player player2 = new Player(j2pseudo, 10, AppDef.PlayerStatus.NotSet);
+
+            GamesManager.playerList = new List<Player>();
+            Debug.WriteLine(player1.Pseudo);
+            GamesManager.playerList.Add(player1);
+            GamesManager.playerList.Add(player2);
+
+            battleshipField = new BattleShipField();
+            GamesManager.sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
+            battleshipField.CreateBoatsForPlayer(GamesManager.playerList[0],GamesManager.nbBoats);
+            battleshipField.CreateBoatsForPlayer(GamesManager.playerList[1], GamesManager.nbBoats);
+
+
+            
+
+            Debug.WriteLine("Champ de bataille créé");
+
+            Debug.WriteLine("Partie lancée");
+            GamesManager.GameStatus = AppDef.GameStatus.Running;
+
+            Debug.WriteLine("C'est au joueur 1 de commencer");
+            GamesManager.activePlayer = GamesManager.playerList[0];
+            tourTxt.Text = "C'est au tour de " + GamesManager.activePlayer.Pseudo + " de tirer";
+
 
             j1Score.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].NbStruck.ToString();
             j2Score.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].NbStruck.ToString();
@@ -122,29 +171,18 @@ namespace App1
             j1Tirs.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].RemainStrike.ToString();
             j2Tirs.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].RemainStrike.ToString();
 
-            seaGridXML.Tapped += (sender, e2) =>
-            {
-                j1Score.Text = GamesManager.playerList[0].Pseudo+" : "+ GamesManager.playerList[0].NbStruck.ToString();
-                j2Score.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].NbStruck.ToString();
-
-                j1Tirs.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].RemainStrike.ToString();
-                j2Tirs.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].RemainStrike.ToString();
-            };
          
-        }
 
-        private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
-        {
+            base.OnNavigatedTo(e);
 
         }
-
         // Fait apparaitre le point d'impact en rouge quand on clique sur une ellipse
         public static void EffectuerUnTir(object sender, PointerRoutedEventArgs e, Sea sea)
         {
             Debug.WriteLine("EffectuerUnTir()");
             Debug.WriteLine("active player : "+GamesManager.activePlayer.Pseudo);
             // si une partie est en cours d'exécution
-            if (GamesManager.GameStatus == AppDef.GameStatus.Running)
+            if (GamesManager.GameStatus == AppDef.GameStatus.Running && GamesManager.GameStatus!=AppDef.GameStatus.Completed)
             {
                 Debug.WriteLine("Le partie est bien lancée.");
                 
@@ -160,36 +198,20 @@ namespace App1
                         Debug.WriteLine("Le joueur " + GamesManager.activePlayer.Pseudo + " envoie un tir");
                         sea.FireAt(sender as Ellipse);
                         
-                       
                     }
                 }
             }
-
-
-        }
-
-        private void j1Placeholder_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            var parameters = JsonConvert.DeserializeObject<dynamic>(e.Parameter as string);
-            // Retrieve the two pseudonyms from the deserialized object
-            string j1pseudo = parameters.Pseudo1;
-            string j2pseudo = parameters.Pseudo2;
-            // Use the pseudonyms as needed
-            // ...
-            base.OnNavigatedTo(e);
-
-            Player player1 = new Player(j1pseudo, 10, AppDef.PlayerStatus.NotSet);
-            Player player2 = new Player(j2pseudo, 10, AppDef.PlayerStatus.NotSet);
-            List<Player> playerList = new List<Player>
+            else if (GamesManager.GameStatus == AppDef.GameStatus.Completed)
             {
-                player1,
-                player2
-            };
-            GamesManager.playerList = playerList;
+                // Créer une nouvelle fenêtre
+                var newWindow = new MainPage();
+
+                // Définir le contenu de la nouvelle fenêtre
+                newWindow.Content = new MainPage();
+
+                // Changer la fenêtre actuelle
+                Window.Current.Content = newWindow;
+            }
         }
     }
 }

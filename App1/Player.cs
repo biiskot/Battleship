@@ -3,6 +3,7 @@ using App1;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Windows.UI.Notifications;
 
 public class Player
 {
@@ -17,6 +18,8 @@ public class Player
     // nombre de de tirs ayant touché un bateau
     private int nbStruck = 0;
     public int NbStruck { get => nbStruck; set => nbStruck = value; }
+
+    public int nbELements; 
     public Player(string pseudo, int strikeCredit, AppDef.PlayerStatus status)
     {
         PlayerID = Guid.NewGuid();
@@ -24,7 +27,7 @@ public class Player
         RemainStrike = strikeCredit;
         Status = status;
         BoatList = new List<Boat>();
-        RemainStrike = 10;
+        RemainStrike = 20;
     }
     
     public bool isAllMyBoatsSunk()

@@ -5,33 +5,46 @@
     xmlns:local="using:App1"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
+    <Page.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF3E2FAB" Offset="0"/>
+            <GradientStop Color="White" Offset="1"/>
+        </LinearGradientBrush>
+    </Page.Background>
 
 
     <Grid x:Name="pageGrid"  Width="1280" Height="720">
 
+        <TextBlock x:Name="j1Placeholder" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Scores :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF231779" FontFamily="Franklin Gothic Medium" FontWeight="Bold" Margin="10,155,0,0"/>
+        <TextBlock x:Name="j1Score" HorizontalAlignment="Left" TextWrapping="Wrap" Text="j1Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="177" FontWeight="Bold" Margin="31,189,0,0" Foreground="Black"/>
 
+        <TextBlock x:Name="j2Score" HorizontalAlignment="Left" TextWrapping="Wrap" Text="j2Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="177" FontWeight="Bold" Margin="31,240,0,0" Foreground="Black"/>
 
-        <Border BorderBrush="Black" BorderThickness="1" Background="#FFD2C3C3">
-            <Grid Margin="9,185,1038,250">
-                <TextBlock x:Name="j1Placeholder" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Scores :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold" SelectionChanged="j1Placeholder_SelectionChanged"/>
-                <TextBlock x:Name="j1Score" HorizontalAlignment="Center" TextWrapping="Wrap" Text="j1Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="177" FontWeight="Bold" Margin="0,46,0,0" Foreground="Black"/>
-
-                <TextBlock x:Name="j2Score" HorizontalAlignment="Center" TextWrapping="Wrap" Text="j2Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="177" FontWeight="Bold" Margin="0,100,0,0" Foreground="Black"/>
-            </Grid>
-        </Border>
-
-        <TextBlock x:Name="j1Coule" Text="TextBlock" TextWrapping="Wrap" HorizontalAlignment="Right" Margin="0,180,13,492" Width="193" />
-        <TextBlock x:Name="j2Coule" Text="TextBlock" TextWrapping="Wrap" HorizontalAlignment="Right" Margin="0,239,9,445" Width="197"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,315,0,0" TextWrapping="Wrap" Text="Tirs restants :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold"/>
+        <TextBlock x:Name="j1Coule" Text="TextBlock" TextWrapping="Wrap" HorizontalAlignment="Right" Margin="0,180,13,492" Width="193" Foreground="Black" />
+        <TextBlock x:Name="j2Coule" Text="TextBlock" TextWrapping="Wrap" HorizontalAlignment="Right" Margin="0,239,9,445" Width="197" Foreground="Black"/>
+        <TextBlock Text="Logs :" FontFamily="Franklin Gothic Medium" TextWrapping="Wrap" HorizontalAlignment="Right" Margin="0,381,76,314" Width="197" FontSize="18" FocusVisualPrimaryBrush="#FF432EAB" Foreground="Black" FontWeight="Bold"/>
+        <TextBlock x:Name="logTxt" Text="" TextWrapping="Wrap" HorizontalAlignment="Right" Margin="0,411,55,258" Width="193" Foreground="Black"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,315,0,0" TextWrapping="Wrap" Text="Tirs restants :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF231779" FontFamily="Franklin Gothic Medium" FontWeight="Bold" FocusVisualPrimaryBrush="#FF231779"/>
         <TextBlock x:Name="j1Tirs" HorizontalAlignment="Left" Margin="31,359,0,0" TextWrapping="Wrap" Text="j1Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="188" FontWeight="Bold" Foreground="Black"/>
         <TextBlock x:Name="j2Tirs" HorizontalAlignment="Left" Margin="31,405,0,0" TextWrapping="Wrap" Text="j2Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="181" FontWeight="Bold" Foreground="#FF040101"/>
+        <TextBlock x:Name="tourTxt" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,66,0,629" Width="293" FontSize="14" FocusVisualPrimaryBrush="#FF7762E0" Foreground="Black" FontFamily="Franklin Gothic Book" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="BattleShip C# UWP" VerticalAlignment="Top" FontSize="36" FontFamily="Impact" FocusVisualPrimaryBrush="#FFCD9BCF" Foreground="#FF231779" Opacity="0.75"/>
+        <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Margin="1190,657,0,0" FontSize="10" Opacity="0.8" Foreground="Black"><Run Text="CONTOIS Gabriel "/><LineBreak/><Run Text="GARCIA Mateo "/><LineBreak/><Run Text="VANBAELINGHEM Baptiste"/></TextBlock>
+        <Button x:Name="showBoatsBtn" Content="Afficher les bateaux" Margin="1007,609,0,0" VerticalAlignment="Top" Foreground="Black" FocusVisualPrimaryBrush="#FFEFDFDF" Background="#3337689E"/>
+        <Button x:Name="repaintBtn" Content="Repaint" Margin="1044,555,0,0" VerticalAlignment="Top" Foreground="Black" FocusVisualPrimaryBrush="#FF73A4AD" Background="#3337689E"/>
+        <Ellipse x:Name="blueEllipse" HorizontalAlignment="Left" Height="30" Margin="59,549,0,0" Stroke="Black" VerticalAlignment="Top" Width="30"/>
+        <Ellipse x:Name="greenEllipse" HorizontalAlignment="Left" Height="30" Margin="59,584,0,0" Stroke="Black" VerticalAlignment="Top" Width="30"/>
+        <Ellipse x:Name="orangeEllipse" HorizontalAlignment="Left" Height="30" Margin="59,619,0,0" Stroke="Black" VerticalAlignment="Top" Width="30"/>
+        <Ellipse x:Name="pinkEllipse" HorizontalAlignment="Left" Height="30" Margin="59,654,0,0" Stroke="Black" VerticalAlignment="Top" Width="30"/>
+        <TextBlock HorizontalAlignment="Left" Margin="94,555,0,0" TextWrapping="Wrap" Text="Element de mer" VerticalAlignment="Top" Foreground="#FF440808"/>
+        <TextBlock HorizontalAlignment="Left" Margin="94,625,0,0" TextWrapping="Wrap" Text="Element de bateau joueur 2" VerticalAlignment="Top" Foreground="#FF440808"/>
+        <TextBlock HorizontalAlignment="Left" Margin="94,590,0,0" TextWrapping="Wrap" Text="Element de bateau joueur 1" VerticalAlignment="Top" Foreground="#FF440808"/>
+        <TextBlock HorizontalAlignment="Left" Margin="94,660,0,0" TextWrapping="Wrap" Text="Element de bateau touché" VerticalAlignment="Top" Foreground="#FF440808"/>
+
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="seaGridXML" Width="610" Height="610"  Margin="0,87,0,0">
-
             <Grid.ColumnDefinitions>
-
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="30"/>
@@ -53,7 +66,6 @@
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
@@ -76,11 +88,6 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-
         </Grid>
-        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="BattleShip C# UWP" VerticalAlignment="Top" FontSize="36" FontFamily="Impact" FocusVisualPrimaryBrush="#FFCD9BCF" Foreground="#FF67238F" Opacity="0.75"/>
-        <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="114" Margin="1190,657,0,0" FontSize="10" Opacity="0.8" Foreground="Black"><Run Text="CONTOIS Gabriel "/><LineBreak/><Run Text="GARCIA Mateo "/><LineBreak/><Run Text="VANBAELINGHEM Baptiste"/></TextBlock>
-        <Button x:Name="showBoatsBtn" Content="Afficher les bateaux" Margin="1112,614,0,0" VerticalAlignment="Top" Foreground="Black" FocusVisualPrimaryBrush="#FFEFDFDF"/>
-
     </Grid>
 </Page>

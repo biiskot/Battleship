@@ -1,6 +1,7 @@
 ﻿// Il faut ajouter un gestionnaire de parties et l'intégrer à l'interface .. une autre fois..
 // Dans cette version, on se contente d'une classe statique qui gère une seule partie.
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -21,10 +22,30 @@ public static class GamesManager
     public static Player winner;
     public static Player loser;
 
+    public static string log;
 
-    public static Player getOponentPlayerObject(Guid playerGuid,List<Player> players)
+    public static int nbBoats;
+
+    public static BlockingCollection<SeaElement> impactedSeaElements = new BlockingCollection<SeaElement>();
+
+    public static List<SeaElement> elementsJ1 = new List<SeaElement>();
+    public static List<SeaElement> elementsJ2 = new List<SeaElement>();
+
+    public static Player getPlayerObject(Guid playerGuid)
     {
-        foreach (Player player in players)
+        foreach (Player player in playerList)
+        {
+            if (player.PlayerID == playerGuid)
+            {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public static Player getOponentPlayerObject(Guid playerGuid)
+    {
+        foreach (Player player in playerList)
         {
             if (player.PlayerID != playerGuid)
             {
@@ -39,7 +60,7 @@ public static class GamesManager
         Player oponent;
         foreach (Player player in players)
         {
-            oponent = getOponentPlayerObject(player.PlayerID,players);
+            oponent = getOponentPlayerObject(player.PlayerID);
             if (player.isAllMyBoatsSunk() && player.NbStruck > oponent.NbStruck)
             {
                 finished = true;

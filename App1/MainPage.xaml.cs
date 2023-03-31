@@ -35,11 +35,12 @@ namespace App1
         {
             string j1pseudo = pseudoj1.Text;
             string j2pseudo= pseudoj2.Text;
+            string nbBoats = nbBoatsBox.Text;
 
-            if(j1pseudo != j2pseudo && j1pseudo!=null && j2pseudo!=null) {
+            if (j1pseudo != j2pseudo && j1pseudo!=null && j2pseudo!=null && nbBoats!=null) {
 
                 // Create an object to hold the two pseudonyms
-                var parameters = new { Pseudo1 = j1pseudo, Pseudo2 = j2pseudo };
+                var parameters = new { Pseudo1 = j1pseudo, Pseudo2 = j2pseudo,Nbboats =nbBoats };
                 // Serialize the object into a string
                 string param = JsonConvert.SerializeObject(parameters);
                 // Pass the serialized object as a parameter when navigating to the PlayScreen page
@@ -51,6 +52,6 @@ namespace App1
             }
            
         }
-     
+
     }
 }
