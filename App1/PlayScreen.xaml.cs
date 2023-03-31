@@ -34,21 +34,21 @@ namespace App1
             this.InitializeComponent();
             Background = new SolidColorBrush(Windows.UI.Colors.AntiqueWhite);
             GamesManager.sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
-            SeaElement seaElement;
+
             // Créer une grille de 20x20 instances de SeaElement
             for (int row = 0; row < AppDef.nbRow; row++)
             {
                 for (int col = 0; col < AppDef.nbCol; col++)
                 {
                     // Remplacer les paramètres du constructeur par les valeurs appropriées pour votre jeu
-                    seaElement = GamesManager.sea.seaGrid[row, col];
+                    
 
                     // Ajouter l'ellipse de l'instance de SeaElement à la grille
-                    seaGridXML.Children.Add(seaElement.ellipse);
+                    seaGridXML.Children.Add(GamesManager.sea.seaGrid[row, col].ellipse);
                     
                     // Définir la position de l'ellipse dans la grille
-                    Grid.SetRow(seaElement.ellipse, seaElement.row);
-                    Grid.SetColumn(seaElement.ellipse, seaElement.col);
+                    Grid.SetRow(GamesManager.sea.seaGrid[row, col].ellipse, GamesManager.sea.seaGrid[row, col].row);
+                    Grid.SetColumn(GamesManager.sea.seaGrid[row, col].ellipse, GamesManager.sea.seaGrid[row, col].col);
                 }
             }     
 
@@ -71,6 +71,8 @@ namespace App1
                 battleshipField.CreateBoatsForPlayer(player1);
                 battleshipField.CreateBoatsForPlayer(player2);
 
+              
+              
                 Debug.WriteLine("Champ de bataille créé");
                 
                 Debug.WriteLine("Partie lancée");
@@ -78,14 +80,61 @@ namespace App1
 
                 Debug.WriteLine("C'est au joueur 1 de commencer");
                 GamesManager.activePlayer = GamesManager.playerList[0];
+
+              
+                showBoatsBtn.Click += (sender, e) =>
+                {
+                    List<SeaElement> toDisplay = battleshipField.ShowAllBoats();
+                    foreach (SeaElement elt in GamesManager.sea.SeaElements)
+                    {
+                        foreach (SeaElement el in toDisplay)
+                        {
+                            if (elt.coord == el.coord)
+                            {
+                                elt.ellipse.Fill = AppDef.greenBrush;
+                                try
+                                {
+                                    seaGridXML.Children.Add(elt.ellipse);
+                                    Grid.SetRow(elt.ellipse, elt.row);
+                                    Grid.SetColumn(elt.ellipse, elt.col);
+                                }
+                                catch(Exception ex)
+                                {
+                                    Debug.WriteLine(ex.ToString());
+                                }
+                                
+                            }
+                        }
+                       
+                        
+                        elt.ellipse.Fill = AppDef.greenBrush;
+                        Grid.SetRow(elt.ellipse, elt.row);
+                        Grid.SetColumn(elt.ellipse, elt.col);
+                        
+                    }
+                };
+              
             }
 
             catch(Exception e) {
                 Debug.WriteLine(e.ToString());
             }
 
-            j1Tirs.Text = GamesManager.playerList[0].NbStruck.ToString();
-            j2Tirs.Text = GamesManager.playerList[0].NbStruck.ToString();
+            j1Score.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].NbStruck.ToString();
+            j2Score.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].NbStruck.ToString();
+
+            j1Tirs.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].RemainStrike.ToString();
+            j2Tirs.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].RemainStrike.ToString();
+
+            seaGridXML.Tapped += (sender, e) =>
+            {
+                j1Score.Text = GamesManager.playerList[0].Pseudo+" : "+ GamesManager.playerList[0].NbStruck.ToString();
+                j2Score.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].NbStruck.ToString();
+
+                j1Tirs.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].RemainStrike.ToString();
+                j2Tirs.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].RemainStrike.ToString();
+            };
+         
         }
 
         private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
@@ -114,7 +163,7 @@ namespace App1
                         (sender as Ellipse).Fill = AppDef.redBrush;
                         Debug.WriteLine("Le joueur " + GamesManager.activePlayer.Pseudo + " envoie un tir");
                         sea.FireAt(sender as Ellipse);
-
+                        
                        
                     }
                 }
@@ -122,13 +171,6 @@ namespace App1
 
 
         }
-
-        public static void displayShipElement(Ellipse ellipse, RoutedEventArgs e)
-        {
-
-           ellipse.Fill = AppDef.pinkBrush;
-        }
-
 
         /*
         public void StartGame(List<Player> players, BattleShipField bsf)

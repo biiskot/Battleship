@@ -39,5 +39,6 @@ public class SeaElement
         Debug.WriteLine("Ellipse_PointerPressed() sur seaElement [" + this.col.ToString() + "," + this.row.ToString()+"]");
         PlayScreen.EffectuerUnTir(sender, e, GamesManager.sea);
     }
+
 }
 

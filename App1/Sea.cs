@@ -56,7 +56,6 @@ public class Sea
         {
             if (ellipse.Name == elt.ellipse.Name)
             {
-                Debug.WriteLine("ellipse.Name == elt.ellipse.Name");
                 impactPoint = elt;
             }
         }
@@ -64,9 +63,7 @@ public class Sea
         if (impactPoint != null)
         {
             code = screenGame.battleshipField.ProcessStrike(GamesManager.activePlayer.PlayerID,impactPoint);
-            Debug.WriteLine("impactPoint not null");
-            Debug.WriteLine(impactPoint.col);
-            Debug.WriteLine(impactPoint.row);
+            Debug.WriteLine("impactPoint not null : ["+impactPoint.row.ToString()+","+impactPoint.col.ToString());
         }
         else {
             Debug.WriteLine("impactPoint null");

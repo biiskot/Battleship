@@ -93,23 +93,38 @@ public class BattleShipField
 
     // Affichage d’un bateau
     // Affichage d'un bateau
-    public void ShowBoat(Boat boat)
+    public List<SeaElement> ShowBoat(Boat boat)
     {
+        List<SeaElement> elements = new List<SeaElement>();
+
         foreach (var elt in boat.ShipElt)
         {
-            Point location = new Point(boat.bow.X + elt.coord.X, boat.bow.Y + elt.coord.Y);
-            //PlayScreen.printShipElement(location as Ellipse, boat.PlayerID, elt.status);
+            foreach(SeaElement seaElt in GamesManager.sea.SeaElements)
+            {
+                if (seaElt.coord == elt.coord)  //Si un élément d'un bateau est sur un seaElement
+                {
+                    if (seaElt.ellipse is Windows.UI.Xaml.Shapes.Ellipse)
+                    { 
+                        elements.Add(seaElt);
+                    }
+
+                }
+            }   
         }
+        return elements;
     }
 
     // Affichage des bateaux d’un joueur
     // Affichage des bateaux d'un joueur
-    public void ShowAllBoats()
+    public List<SeaElement> ShowAllBoats()
     {
+        List<SeaElement> elements = new List<SeaElement>();
+        Debug.WriteLine("ShowAllBoats()");
         foreach (Boat boat in boatList)
-        {
-            ShowBoat(boat);
+        { 
+            elements.AddRange(ShowBoat(boat));
         }
+        return elements;
     }
 
     // Gestion du tir effectué par un joueur sur un élément de mer :
