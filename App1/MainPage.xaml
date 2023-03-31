@@ -10,6 +10,11 @@
 
     <Grid Style="{StaticResource HandwritingViewCandidatesBarStyle}" BorderBrush="White" Background="#FF757575">
         <Button Content="Lancer" Margin="0,583,0,0" VerticalAlignment="Top" Height="44" Width="119" HorizontalAlignment="Center" Click="launchGame"/>
+        <TextBox x:Name="pseudoj1"  HorizontalAlignment="Center" Margin="0,285,0,0" TextWrapping="Wrap" Text="joueur1" VerticalAlignment="Top" Height="37" Width="131"/>
+        <TextBox x:Name="pseudoj2"  HorizontalAlignment="Center" Margin="0,395,0,0" TextWrapping="Wrap" Text="joueur2" VerticalAlignment="Top" Height="37" Width="131"/>
+        <TextBlock x:Name="warningTxt" HorizontalAlignment="Left" Margin="512,526,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="250"/>
+        <TextBlock HorizontalAlignment="Left" Margin="561,248,0,0" TextWrapping="Wrap" Text="Pseudo du Joueur 1" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="562,360,0,0" TextWrapping="Wrap" Text="Pseudo du Joueur 2" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>

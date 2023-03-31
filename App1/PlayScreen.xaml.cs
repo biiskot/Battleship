@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -29,6 +30,7 @@ namespace App1
     {
         public BattleShipField battleshipField;
 
+ 
         public PlayScreen()
         {
             this.InitializeComponent();
@@ -56,20 +58,14 @@ namespace App1
             try
             {
                 // Création des joueurs
-                Player player1 = new Player("joueur1", 10, AppDef.PlayerStatus.NotSet);
-                Player player2 = new Player("joueur2", 10, AppDef.PlayerStatus.NotSet);
-                GamesManager.playerList = new List<Player>
-                {
-                    player1,
-                    player2
-                };
+               
 
                 // Création du champ de bataille
                 battleshipField = new BattleShipField();
                 GamesManager.sea = new Sea(AppDef.nbRow, AppDef.nbCol, this);
 
-                battleshipField.CreateBoatsForPlayer(player1);
-                battleshipField.CreateBoatsForPlayer(player2);
+                battleshipField.CreateBoatsForPlayer(GamesManager.playerList[0]);
+                battleshipField.CreateBoatsForPlayer(GamesManager.playerList[1]);
 
               
               
@@ -82,7 +78,7 @@ namespace App1
                 GamesManager.activePlayer = GamesManager.playerList[0];
 
               
-                showBoatsBtn.Click += (sender, e) =>
+                showBoatsBtn.Click += (sender, e1) =>
                 {
                     List<SeaElement> toDisplay = battleshipField.ShowAllBoats();
                     foreach (SeaElement elt in GamesManager.sea.SeaElements)
@@ -116,8 +112,8 @@ namespace App1
               
             }
 
-            catch(Exception e) {
-                Debug.WriteLine(e.ToString());
+            catch(Exception exp) {
+                Debug.WriteLine(exp.ToString());
             }
 
             j1Score.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].NbStruck.ToString();
@@ -126,7 +122,7 @@ namespace App1
             j1Tirs.Text = GamesManager.playerList[0].Pseudo + " : " + GamesManager.playerList[0].RemainStrike.ToString();
             j2Tirs.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].RemainStrike.ToString();
 
-            seaGridXML.Tapped += (sender, e) =>
+            seaGridXML.Tapped += (sender, e2) =>
             {
                 j1Score.Text = GamesManager.playerList[0].Pseudo+" : "+ GamesManager.playerList[0].NbStruck.ToString();
                 j2Score.Text = GamesManager.playerList[1].Pseudo + " : " + GamesManager.playerList[1].NbStruck.ToString();
@@ -172,81 +168,28 @@ namespace App1
 
         }
 
-        /*
-        public void StartGame(List<Player> players, BattleShipField bsf)
+        private void j1Placeholder_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            
-            Debug.WriteLine("battleShipField.startGame()");
 
-            GamesManager.GameStatus = AppDef.GameStatus.Running;
-
-            //GamesManager.GameGuid = new Random()
-
-            Player player1 = players[0];
-            Player player2 = players[1];
-            //on change le stats des joueurs:
-
-
-            player1.Status = AppDef.PlayerStatus.NotSet;
-            player2.Status = AppDef.PlayerStatus.NotSet;
-
-
-            // Création des bateaux pour chaque joueur
-            bsf.CreateBoatsForPlayer(player1, new List<Boat>());
-            bsf.CreateBoatsForPlayer(player2, player1.BoatList);
-
-            
-                    // Initialisation du timer pour la gestion des éléments de mer touchés
-                    aTimer = new System.Timers.Timer(5000);
-                    aTimer.Elapsed += async (sender, e) => {
-                        //
-                    };
-                    aTimer.AutoReset = true;
-                    aTimer.Enabled = true;
-
-            
-
-            // Affichage de la grille pour chaque joueur
-            player1.ShowGrid();
-            player2.ShowGrid();
-
-
-            // Boucle de jeu jusqu'à la fin de la partie
-            while (GamesManager.GameStatus == AppDef.GameStatus.Running)
-            {
-                if(GamesManager.activePlayer == player1)
-                {
-                    player1.PlayTurn();
-                    GamesManager.activePlayer = player2;
-                }
-                else if(GamesManager.activePlayer == player2)
-                {
-                    player2.PlayTurn();
-                    GamesManager.activePlayer = player1;
-                }
-
-                // Vérification de la fin de partie
-                if (GamesManager.GameStatus == AppDef.GameStatus.Completed)
-                {
-                    if (GamesManager.activePlayer == player1)
-                    {
-                        Console.WriteLine("Le joueur 2 a gagné !");
-                        {
-                            player2.Status = AppDef.PlayerStatus.Winner;
-                            player1.Status = AppDef.PlayerStatus.Loser;
-                        }
-                    }
-                    else if (GamesManager.activePlayer == player2)
-                    {
-                        Console.WriteLine("Le joueur 1 a gagné !");
-                        player1.Status = AppDef.PlayerStatus.Winner;
-                        player2.Status = AppDef.PlayerStatus.Loser;
-                        //gameFinished = true;
-                    }
-                }
-            }
-                
         }
-        */
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            var parameters = JsonConvert.DeserializeObject<dynamic>(e.Parameter as string);
+            // Retrieve the two pseudonyms from the deserialized object
+            string j1pseudo = parameters.Pseudo1;
+            string j2pseudo = parameters.Pseudo2;
+            // Use the pseudonyms as needed
+            // ...
+            base.OnNavigatedTo(e);
+
+            Player player1 = new Player(j1pseudo, 10, AppDef.PlayerStatus.NotSet);
+            Player player2 = new Player(j2pseudo, 10, AppDef.PlayerStatus.NotSet);
+            List<Player> playerList = new List<Player>
+            {
+                player1,
+                player2
+            };
+            GamesManager.playerList = playerList;
+        }
     }
 }

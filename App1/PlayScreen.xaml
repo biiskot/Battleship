@@ -10,19 +10,23 @@
 
 
     <Grid x:Name="pageGrid"  Width="1280" Height="720">
+
+
+
         <Border BorderBrush="Black" BorderThickness="1" Background="#FFD2C3C3">
             <Grid Margin="9,185,1038,250">
-                <TextBlock x:Name="j1Placeholder" HorizontalAlignment="Left" TextWrapping="Wrap" Text="j1Placeholder" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold" Margin="27,0,0,0"/>
+                <TextBlock x:Name="j1Placeholder" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Scores :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold" SelectionChanged="j1Placeholder_SelectionChanged"/>
                 <TextBlock x:Name="j1Score" HorizontalAlignment="Center" TextWrapping="Wrap" Text="j1Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="177" FontWeight="Bold" Margin="0,46,0,0" Foreground="Black"/>
 
-                <TextBlock x:Name="j2Placeholder" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="j2Placeholder" VerticalAlignment="Center" Height="45" Width="202" FontSize="24" FontFamily="Franklin Gothic Medium" Foreground="#FF00197C" FontWeight="Bold" Margin="27,0,0,0"/>
-                <TextBlock x:Name="j2Score" HorizontalAlignment="Center" TextWrapping="Wrap" Text="j2Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="177" FontWeight="Bold" Margin="0,163,0,0" Foreground="Black"/>
+                <TextBlock x:Name="j2Score" HorizontalAlignment="Center" TextWrapping="Wrap" Text="j2Score" VerticalAlignment="Top" FontSize="16" Height="41" Width="177" FontWeight="Bold" Margin="0,100,0,0" Foreground="Black"/>
             </Grid>
         </Border>
 
-        <TextBlock HorizontalAlignment="Left" Margin="39,478,0,0" TextWrapping="Wrap" Text="Tirs restants :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold"/>
-        <TextBlock x:Name="j1Tirs" HorizontalAlignment="Left" Margin="39,512,0,0" TextWrapping="Wrap" Text="j1Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="188" FontWeight="Bold" Foreground="Black"/>
-        <TextBlock x:Name="j2Tirs" HorizontalAlignment="Left" Margin="39,558,0,0" TextWrapping="Wrap" Text="j2Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="181" FontWeight="Bold" Foreground="#FF040101"/>
+        <TextBlock x:Name="j1Coule" Text="TextBlock" TextWrapping="Wrap" HorizontalAlignment="Right" Margin="0,180,13,492" Width="193" />
+        <TextBlock x:Name="j2Coule" Text="TextBlock" TextWrapping="Wrap" HorizontalAlignment="Right" Margin="0,239,9,445" Width="197"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,315,0,0" TextWrapping="Wrap" Text="Tirs restants :" VerticalAlignment="Top" Height="45" Width="202" FontSize="24" Foreground="#FF00197C" FontFamily="Franklin Gothic Medium" FontWeight="Bold"/>
+        <TextBlock x:Name="j1Tirs" HorizontalAlignment="Left" Margin="31,359,0,0" TextWrapping="Wrap" Text="j1Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="188" FontWeight="Bold" Foreground="Black"/>
+        <TextBlock x:Name="j2Tirs" HorizontalAlignment="Left" Margin="31,405,0,0" TextWrapping="Wrap" Text="j2Tirs" VerticalAlignment="Top" FontSize="16" Height="41" Width="181" FontWeight="Bold" Foreground="#FF040101"/>
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="seaGridXML" Width="610" Height="610"  Margin="0,87,0,0">
 

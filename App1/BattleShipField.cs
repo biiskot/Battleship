@@ -32,7 +32,7 @@ public class BattleShipField
     public List<Boat> boatList = new List<Boat>();
 
     public int size;
-    private int NumBoatsPerPlayer = 4;
+    private int NumBoatsPerPlayer = 5;
 
 
 
